@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import "~normalize.css";
+@import "_variables.scss";
+
+@import "player.scss";
+@import "track-list.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 10px;
+}
+
+.soundcloud {
+  padding: 100px 0;
+  width: 100%;
+  height: 100%;
+  background-color: $backgroundColor;
+}

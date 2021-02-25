@@ -1,0 +1,58 @@
+.player {
+  padding: 20px 5px;
+  background-color: $white;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  &__buttons {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    & > * {
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
+  &__name {
+  }
+  &__track-slider {
+    flex: 1 1 auto;
+    position: relative;
+    height: 1px;
+    width: 200px;
+    background-color: $mainColor;
+    .track-slider {
+    }
+    .track-handler {
+      display: block;
+      width: 7px;
+      height: 7px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: $mainColor;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  &__volume-slider {
+    position: relative;
+    height: 1px;
+    width: 70px;
+    background-color: $mainColor;
+    .volume-slider {
+    }
+    .volume-handler {
+      display: block;
+      width: 7px;
+      height: 7px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: $mainColor;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
