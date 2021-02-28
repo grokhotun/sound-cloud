@@ -2,6 +2,14 @@ import {BaseComponent} from '@/core/BaseComponent';
 
 export class TracksList extends BaseComponent {
   static className = 'track-list'
+
+  constructor($root) {
+    super($root, {
+      name: 'Player',
+      listeners: []
+    })
+  }
+
   renderComponent() {
     return `
         <li class="track-list__item">

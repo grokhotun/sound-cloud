@@ -2,6 +2,14 @@ import {BaseComponent} from '@/core/BaseComponent';
 
 export class Player extends BaseComponent {
   static className = 'player'
+
+  constructor($root) {
+    super($root, {
+      name: 'Player',
+      listeners: ['click']
+    })
+  }
+
   renderComponent() {
     return `
         <div class="player__buttons">
@@ -37,5 +45,10 @@ export class Player extends BaseComponent {
           </div>
         </div>
     `
+  }
+
+  onClick(event) {
+    const $root = this.$root
+    console.log($root)
   }
 }

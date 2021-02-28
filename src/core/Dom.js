@@ -1,3 +1,6 @@
+/**
+ * Класс для работы с DOM деревом
+ */
 class DOM {
   constructor(selector) {
     if (typeof selector === 'string') {
@@ -20,6 +23,14 @@ class DOM {
       node = node.$currentElement
     }
     this.$currentElement.append(node)
+  }
+
+  on(eventType, callbackFunction) {
+    this.$currentElement.addEventListener(eventType, callbackFunction)
+  }
+
+  off(eventType, callbackFunction) {
+    this.$currentElement.removeEventListener(eventType, callbackFunction)
   }
 }
 
