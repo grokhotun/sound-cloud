@@ -1,4 +1,6 @@
+import {dragHandler} from '@/components/Player/player.functions';
 import {BaseComponent} from '@/core/BaseComponent';
+import {$} from '@/core/Dom';
 
 export class Player extends BaseComponent {
   static className = 'player'
@@ -6,7 +8,7 @@ export class Player extends BaseComponent {
   constructor($root) {
     super($root, {
       name: 'Player',
-      listeners: ['click']
+      listeners: ['click', 'mousedown', 'mousemove']
     })
   }
 
@@ -24,16 +26,16 @@ export class Player extends BaseComponent {
           </div>
         </div>
         <div class="player__track-slider">
-          <div class="track-slider"></div>
-          <div class="track-handler"></div>
+          <div data-type="track-slider" class="track-slider"></div>
+          <div data-handle="track" class="track-handler"></div>
         </div>
         <div class="player__buttons">
           <div class="button">
             <i class="fas fa-volume-up"></i>
           </div>
           <div class="player__volume-slider">
-            <div class="volume-slider"></div>
-            <div class="volume-handler"></div>
+            <div data-type="volume-slider" class="volume-slider"></div>
+            <div data-handle="volume" class="volume-handler"></div>
           </div>
         </div>
         <div class="player__buttons">
@@ -48,7 +50,17 @@ export class Player extends BaseComponent {
   }
 
   onClick(event) {
-    const $root = this.$root
-    console.log($root)
+  }
+
+  onMousedown(event) {
+    const $target = $(event.target)
+    if ($target.attr('data-handle') === 'track') {
+      dragHandler(event, 'track-slider')
+    } else if ($target.attr('data-handle') === 'volume') {
+      dragHandler(event, 'volume-slider')
+    }
+  }
+
+  onMousemove(event) {
   }
 }

@@ -32,6 +32,25 @@ class DOM {
   off(eventType, callbackFunction) {
     this.$currentElement.removeEventListener(eventType, callbackFunction)
   }
+
+  attr(name, value) {
+    if (value) {
+      this.$currentElement.setAttribute(name, value)
+      return this
+    }
+    return this.$currentElement.getAttribute(name)
+  }
+
+  closest(selector) {
+    return $(this.$currentElement.closest(selector))
+  }
+
+  coords() {
+    return this.$currentElement.getBoundingClientRect()
+  }
+
+  styles() {
+  }
 }
 
 export function $(selector) {
