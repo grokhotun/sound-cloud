@@ -1,9 +1,9 @@
 import {BaseComponent} from '@/core/BaseComponent';
 
 export class Player extends BaseComponent {
+  static className = 'player'
   renderComponent() {
     return `
-      <div class="player">
         <div class="player__buttons">
           <div class="button">
             <i class="fas fa-backward"></i>
@@ -36,7 +36,6 @@ export class Player extends BaseComponent {
             <i class="fas fa-redo-alt"></i>
           </div>
         </div>
-      </div>
     `
   }
 }

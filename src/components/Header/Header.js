@@ -1,11 +1,10 @@
 import {BaseComponent} from '@/core/BaseComponent';
 
 export class Header extends BaseComponent {
+  static className = 'header'
   renderComponent() {
     return `
-      <div class="header">
-        <h1>SoundCloud</h1>
-      </div>
+      <h1>SoundCloud</h1>
     `
   }
 }

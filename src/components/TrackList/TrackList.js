@@ -1,9 +1,9 @@
 import {BaseComponent} from '@/core/BaseComponent';
 
-export class TacksList extends BaseComponent {
+export class TracksList extends BaseComponent {
+  static className = 'track-list'
   renderComponent() {
     return `
-      <ul class="track-list">
         <li class="track-list__item">
           <div class="button">
             <i class="fas fa-play"></i>
@@ -36,7 +36,6 @@ export class TacksList extends BaseComponent {
           <div class="track-list__name">Макс Корж - Свитер</div>
           <div class="track-list__size">9 МБ</div>
         </li>
-      </ul>
     `
   }
 }

@@ -12,6 +12,7 @@
 }
 
 #root {
+  background-color: $backgroundColor;
   height: 100vh;
   width: 100vw;
 }
@@ -21,17 +22,10 @@ body {
   font-size: 12px;
 }
 
-.container {
+.soundcloud {
   width: 100%;
   height: 100%;
   margin: 0 auto;
   max-width: 800px;
-  padding: 0 10px;
-}
-
-.soundcloud {
-  padding: 100px 0;
-  width: 100%;
-  height: 100%;
-  background-color: $backgroundColor;
+  padding: 100px 10px;
 }
