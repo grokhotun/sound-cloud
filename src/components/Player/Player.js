@@ -16,6 +16,7 @@ export class Player extends StateComponent {
   beforeInit() {
     const initialState = {
       play: false,
+      mute: false,
       shuffle: false,
       repeat: false
     }
@@ -34,14 +35,43 @@ export class Player extends StateComponent {
 
   onClick(event) {
     const $target = $(event.target)
-    console.log($target)
     const $button = $target.closest('[data-type="button"]')
-    if ($button && $button.attr('data-type') === 'button') {
-      console.log($button.attr('data-action'))
-      this.setState({
-        play: true
-      })
-      console.log(this.state)
+    let value
+    if ($button.currentElement) {
+      switch ($button.attr('data-action')) {
+        case 'play':
+        case 'pause':
+          value = this.state.play
+          this.setState({
+            play: !value
+          })
+          break;
+
+        case 'mute':
+        case 'unmute':
+          value = this.state.mute
+          this.setState({
+            mute: !value
+          })
+          break;
+
+        case 'shuffle':
+          value = this.state.shuffle
+          this.setState({
+            shuffle: !value
+          })
+          break;
+
+        case 'repeat':
+          value = this.state.repeat
+          this.setState({
+            repeat: !value
+          })
+          break;
+
+        default:
+          break;
+      }
     }
   }
 
@@ -51,8 +81,5 @@ export class Player extends StateComponent {
     } else if (getHandleType(event) === 'volume') {
       dragHandler(event, 'volume-slider')
     }
-  }
-
-  onMousemove(event) {
   }
 }

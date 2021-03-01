@@ -10,6 +10,10 @@ class DOM {
     }
   }
 
+  get currentElement() {
+    return this.$currentElement
+  }
+
   html(html) {
     if (typeof html === 'string') {
       this.$currentElement.innerHTML = html

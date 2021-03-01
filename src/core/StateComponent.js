@@ -20,6 +20,6 @@ export class StateComponent extends BaseComponent {
       ...this.state,
       ...newState
     }
-    console.log(this.$root.html(this.template))
+    this.$root.html(this.template)
   }
 }
