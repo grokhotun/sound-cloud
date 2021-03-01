@@ -1,7 +1,10 @@
 import {Header} from '@/components/Header/Header'
 import {Player} from '@/components/Player/Player'
 import {SoundCloud} from '@/components/SoundCloud/SoundCloud'
-import {TracksList} from '@/components/TrackList/TrackList';
+import {TrackList} from '@/components/TrackList/TrackList';
+import {createStore} from '@/core/createStore';
+import {storage} from '@/core/utils';
+import {rootReducer} from '@/redux/rootReducer';
 // import firebase from 'firebase'
 // import 'firebase/storage'
 
@@ -46,8 +49,21 @@ import '@/scss/index.scss'
 
 // console.log(storage)
 
+const initialState = {
+  repeat: false,
+  shuffle: false
+}
+
+const store = createStore(initialState, rootReducer)
+
+store.subscribe(state => {
+  console.log(state)
+  storage('sound-cloud', state)
+})
 
 const soundClound = new SoundCloud('#root', {
-  components: [Header, Player, TracksList]
+  components: [Header, Player, TrackList],
+  store
 })
+
 soundClound.init()

@@ -1,6 +1,6 @@
 import {BaseComponent} from '@/core/BaseComponent';
 
-export class TracksList extends BaseComponent {
+export class TrackList extends BaseComponent {
   static className = 'track-list'
 
   constructor($root) {

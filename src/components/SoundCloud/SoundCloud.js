@@ -4,6 +4,7 @@ export class SoundCloud {
   constructor(selector, options = {}) {
     this.$rootElement = $(selector)
     this.components = options.components || []
+    this.store = options.store
   }
 
   /**
@@ -13,9 +14,12 @@ export class SoundCloud {
    */
   init() {
     const $rootNode = $.create('div', 'soundcloud')
+    const componentOptions = {
+      store: this.store
+    }
     this.components = this.components.map(Component => {
       const $componentNode = $.create('div', Component.className)
-      const component = new Component($componentNode)
+      const component = new Component($componentNode, componentOptions)
       $componentNode.html(component.renderComponent())
       $rootNode.append($componentNode)
       return component

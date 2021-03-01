@@ -2,14 +2,16 @@ import {dragHandler, getHandleType} from '@/components/Player/player.functions';
 import {getPlayer} from '@/components/Player/player.template';
 import {$} from '@/core/Dom';
 import {StateComponent} from '@/core/StateComponent';
+import {toggleShuffle} from '@/redux/actions';
 
 export class Player extends StateComponent {
   static className = 'player'
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Player',
-      listeners: ['mousedown', 'click']
+      listeners: ['mousedown', 'click'],
+      ...options
     })
   }
 
@@ -21,6 +23,13 @@ export class Player extends StateComponent {
       repeat: false
     }
     this.useState(initialState)
+  }
+
+  init() {
+    super.init()
+    // this.$subscribe(state => {
+    //   console.log('PlayerState', state)
+    // })
   }
 
 
@@ -56,10 +65,7 @@ export class Player extends StateComponent {
           break;
 
         case 'shuffle':
-          value = this.state.shuffle
-          this.setState({
-            shuffle: !value
-          })
+          this.$dispatch(toggleShuffle())
           break;
 
         case 'repeat':
