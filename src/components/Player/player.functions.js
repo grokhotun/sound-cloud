@@ -13,10 +13,22 @@ export function dragHandler(event, sliderType) {
     } else if (delta < 0) {
       delta = 0
     }
-    $target.$currentElement.style.left = `${delta}px`
+    $target.css({
+      left: `${delta}px`
+    })
   }
 
   document.onmouseup = () => {
     document.onmousemove = null
+  }
+}
+
+export function getHandleType(event) {
+  if ($(event.target).attr('data-handle') === 'track') {
+    return 'track'
+  } else if ($(event.target).attr('data-handle') === 'volume') {
+    return 'volume'
+  } else {
+    return ''
   }
 }

@@ -1,62 +1,54 @@
-import {dragHandler} from '@/components/Player/player.functions';
-import {BaseComponent} from '@/core/BaseComponent';
+import {dragHandler, getHandleType} from '@/components/Player/player.functions';
+import {getPlayer} from '@/components/Player/player.template';
 import {$} from '@/core/Dom';
+import {StateComponent} from '@/core/StateComponent';
 
-export class Player extends BaseComponent {
+export class Player extends StateComponent {
   static className = 'player'
 
   constructor($root) {
     super($root, {
       name: 'Player',
-      listeners: ['click', 'mousedown', 'mousemove']
+      listeners: ['mousedown', 'click']
     })
   }
 
+  beforeInit() {
+    const initialState = {
+      play: false,
+      shuffle: false,
+      repeat: false
+    }
+    this.useState(initialState)
+  }
+
+
+  get template() {
+    return getPlayer(this.state)
+  }
+
+
   renderComponent() {
-    return `
-        <div class="player__buttons">
-          <div class="button">
-            <i class="fas fa-backward"></i>
-          </div>
-          <div class="button">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="button">
-            <i class="fas fa-forward"></i>
-          </div>
-        </div>
-        <div class="player__track-slider">
-          <div data-type="track-slider" class="track-slider"></div>
-          <div data-handle="track" class="track-handler"></div>
-        </div>
-        <div class="player__buttons">
-          <div class="button">
-            <i class="fas fa-volume-up"></i>
-          </div>
-          <div class="player__volume-slider">
-            <div data-type="volume-slider" class="volume-slider"></div>
-            <div data-handle="volume" class="volume-handler"></div>
-          </div>
-        </div>
-        <div class="player__buttons">
-          <div class="button">
-            <i class="fas fa-random"></i>
-          </div>
-          <div class="button">
-            <i class="fas fa-redo-alt"></i>
-          </div>
-        </div>
-    `
+    return this.template
   }
 
   onClick(event) {
+    const $target = $(event.target)
+    console.log($target)
+    const $button = $target.closest('[data-type="button"]')
+    if ($button && $button.attr('data-type') === 'button') {
+      console.log($button.attr('data-action'))
+      this.setState({
+        play: true
+      })
+      console.log(this.state)
+    }
   }
 
   onMousedown(event) {
-    const $target = $(event.target)
-    if ($target.attr('data-handle') === 'track') {
+    if (getHandleType(event) === 'track') {
       dragHandler(event, 'track-slider')
-    } else if ($target.attr('data-handle') === 'volume') {
+    } else if (getHandleType(event) === 'volume') {
       dragHandler(event, 'volume-slider')
     }
   }

@@ -49,7 +49,11 @@ class DOM {
     return this.$currentElement.getBoundingClientRect()
   }
 
-  styles() {
+  css(styles = {}) {
+    Object.keys(styles).forEach(key => {
+      this.$currentElement.style[key] = styles[key]
+    })
+    return this
   }
 }
 
