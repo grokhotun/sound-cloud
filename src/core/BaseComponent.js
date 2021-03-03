@@ -5,7 +5,9 @@ export class BaseComponent extends DomListener {
     super($root, options.listeners)
     this.name = options.name || 'DefaultName'
     this.store = options.store
-    this.storeSub = null
+    this.audio = options.audio
+    this.watch = options.watch || []
+    // this.storeSub = null
     this.beforeInit()
   }
 
@@ -25,14 +27,24 @@ export class BaseComponent extends DomListener {
 
   destroy() {
     this.removeListeners()
-    this.storeSub.unsubscribe()
+    // this.storeSub.unsubscribe()
+  }
+
+  $storeHasChanged() {}
+
+  isWatching(key) {
+    return this.watch.includes(key)
   }
 
   $dispatch(action) {
     this.store.dispatch(action)
   }
 
-  $subscribe(func) {
-    this.storeSub = this.store.subscribe(func)
+  // $subscribe(func) {
+  //   this.storeSub = this.store.subscribe(func)
+  // }
+
+  $getState() {
+    return this.store.getState()
   }
 }

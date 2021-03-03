@@ -1,3 +1,5 @@
+import {transformRange} from '@/core/utils'
+
 export function getButton(type = 'play', classes = '', action = '') {
   return `
     <div
@@ -11,10 +13,14 @@ export function getButton(type = 'play', classes = '', action = '') {
 
 
 export function getPlayer(state) {
-  const playPauseButton = state.play ? getButton('pause', '', 'pause') : getButton('play', '', 'play')
+  const playPauseButton = state.play ? getButton('pause', '', 'play') : getButton('play', '', 'play')
   const randomButton = state.shuffle ? getButton('random', 'button--random active', 'shuffle') : getButton('random', 'button--random', 'shuffle')
   const repeatButton = state.repeat ? getButton('redo-alt', 'button--repeat active', 'repeat') : getButton('redo-alt', 'button--repeat', 'repeat')
-  const muteUnmuteButton = state.mute ? getButton('volume-mute', '', 'unmute') : getButton('volume-up', '', 'mute')
+  const muteUnmuteButton = state.mute ? getButton('volume-mute', '', 'mute') : getButton('volume-up', '', 'mute')
+  const volume = transformRange(state.currentTrackVolume, {min: 0, max: 1}, {min: 0, max: 70}, false)
+  console.log(volume)
+  const currentTrackVolume = `${volume}px`
+  const currentTracktime = `${state.currentTracktime}px`
   return `
     <div class="player__buttons">
       ${getButton('backward', '', 'prev')}
@@ -23,13 +29,13 @@ export function getPlayer(state) {
     </div>
     <div class="player__track-slider">
       <div data-type="track-slider" class="track-slider"></div>
-      <div data-handle="track" class="track-handler"></div>
+      <div style="left: ${currentTracktime}" data-handle="track" class="track-handler"></div>
     </div>
     <div class="player__buttons">
       ${muteUnmuteButton}
       <div class="player__volume-slider">
         <div data-type="volume-slider" class="volume-slider"></div>
-        <div data-handle="volume" class="volume-handler"></div>
+        <div style="left: ${currentTrackVolume}" data-handle="volume" class="volume-handler"></div>
       </div>
     </div>
     <div class="player__buttons">

@@ -5,9 +5,9 @@ import {TrackList} from '@/components/TrackList/TrackList';
 import {createStore} from '@/core/createStore';
 import {storage} from '@/core/utils';
 import {rootReducer} from '@/redux/rootReducer';
-// import firebase from 'firebase'
-// import 'firebase/storage'
-
+import {defaultStore} from '@/redux/defaultStore';
+import {createAudioAPI} from './core/Audio';
+import {MAX_KORZH} from '@/core/consts'
 import '@/scss/index.scss'
 
 // const firebaseConfig = {
@@ -49,21 +49,19 @@ import '@/scss/index.scss'
 
 // console.log(storage)
 
-const initialState = {
-  repeat: false,
-  shuffle: false
-}
 
-const store = createStore(initialState, rootReducer)
+const store = createStore(defaultStore, rootReducer)
+const audio = createAudioAPI(MAX_KORZH)
 
 store.subscribe(state => {
-  console.log(state)
+  console.log('ActualStore', state)
   storage('sound-cloud', state)
 })
 
 const soundClound = new SoundCloud('#root', {
   components: [Header, Player, TrackList],
-  store
+  store,
+  audio
 })
 
 soundClound.init()

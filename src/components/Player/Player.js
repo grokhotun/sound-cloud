@@ -2,7 +2,8 @@ import {dragHandler, getHandleType} from '@/components/Player/player.functions';
 import {getPlayer} from '@/components/Player/player.template';
 import {$} from '@/core/Dom';
 import {StateComponent} from '@/core/StateComponent';
-import {toggleShuffle} from '@/redux/actions';
+import {transformRange} from '@/core/utils';
+import {togglePlay, toggleShuffle, toggleRepeat, toggleMute, updateCurrentTracktime, setIsRewinding, updateCurrenttrackVolume} from '@/redux/actions';
 
 export class Player extends StateComponent {
   static className = 'player'
@@ -10,7 +11,8 @@ export class Player extends StateComponent {
   constructor($root, options) {
     super($root, {
       name: 'Player',
-      listeners: ['mousedown', 'click'],
+      listeners: ['mousedown', 'mouseup', 'click'],
+      watch: ['play', 'mute', 'shuffle', 'repeat', 'currentTracktime'],
       ...options
     })
   }
@@ -20,48 +22,53 @@ export class Player extends StateComponent {
       play: false,
       mute: false,
       shuffle: false,
-      repeat: false
+      repeat: false,
+      currentTracktime: 0
     }
     this.useState(initialState)
+    this.audio.onTimeupdate(() => {
+      const {isRewinding} = this.$getState()
+      if (!isRewinding) {
+        const trackTime = transformRange(this.audio.currentTime(), {min: 0, max: this.audio.trackDuration()}, {min: 0, max: 478})
+        this.$dispatch(updateCurrentTracktime(trackTime))
+      }
+    })
+  }
+
+  $storeHasChanged(changes) {
+    this.setState(changes)
   }
 
   init() {
     super.init()
-    // this.$subscribe(state => {
-    //   console.log('PlayerState', state)
-    // })
   }
-
 
   get template() {
-    return getPlayer(this.state)
+    return getPlayer(this.$getState())
   }
-
 
   renderComponent() {
     return this.template
   }
 
   onClick(event) {
+    let isPaused
     const $target = $(event.target)
     const $button = $target.closest('[data-type="button"]')
-    let value
     if ($button.currentElement) {
       switch ($button.attr('data-action')) {
         case 'play':
-        case 'pause':
-          value = this.state.play
-          this.setState({
-            play: !value
-          })
+          isPaused = this.$getState().play
+          if (!isPaused) {
+            this.audio.play()
+          } else {
+            this.audio.pause()
+          }
+          this.$dispatch(togglePlay())
           break;
 
         case 'mute':
-        case 'unmute':
-          value = this.state.mute
-          this.setState({
-            mute: !value
-          })
+          this.$dispatch(toggleMute())
           break;
 
         case 'shuffle':
@@ -69,10 +76,7 @@ export class Player extends StateComponent {
           break;
 
         case 'repeat':
-          value = this.state.repeat
-          this.setState({
-            repeat: !value
-          })
+          this.$dispatch(toggleRepeat())
           break;
 
         default:
@@ -81,11 +85,58 @@ export class Player extends StateComponent {
     }
   }
 
-  onMousedown(event) {
-    if (getHandleType(event) === 'track') {
-      dragHandler(event, 'track-slider')
-    } else if (getHandleType(event) === 'volume') {
-      dragHandler(event, 'volume-slider')
+  onTouchstart(event) {
+    let isPaused
+    const $target = $(event.target)
+    const $button = $target.closest('[data-type="button"]')
+    if ($button.currentElement) {
+      switch ($button.attr('data-action')) {
+        case 'play':
+          isPaused = this.$getState().play
+          if (!isPaused) {
+            this.audio.play()
+          } else {
+            this.audio.pause()
+          }
+          this.$dispatch(togglePlay())
+          break;
+
+        case 'mute':
+          this.$dispatch(toggleMute())
+          break;
+
+        case 'shuffle':
+          this.$dispatch(toggleShuffle())
+          break;
+
+        case 'repeat':
+          this.$dispatch(toggleRepeat())
+          break;
+
+        default:
+          break;
+      }
     }
+  }
+
+  async onMousedown(event) {
+    if (getHandleType(event) === 'track') {
+      this.$dispatch(setIsRewinding(true))
+      const rewindingTime = await dragHandler(event, 'track-slider')
+      const trackTime = transformRange(rewindingTime, {min: 0, max: 478}, {min: 0, max: this.audio.trackDuration()})
+      this.audio.rewind(trackTime)
+      this.$dispatch(setIsRewinding(false))
+    } else if (getHandleType(event) === 'volume') {
+      this.$dispatch(setIsRewinding(true))
+      const volumeValue = await dragHandler(event, 'volume-slider')
+      const newVolumeValue = transformRange(volumeValue, {min: 0, max: 70}, {min: 0, max: 1}, false)
+      this.audio.volume(newVolumeValue)
+      this.$dispatch(updateCurrenttrackVolume(newVolumeValue))
+      this.$dispatch(setIsRewinding(false))
+    }
+  }
+
+  onMouseup() {
+
   }
 }

@@ -1,10 +1,13 @@
 import {$} from '@/core/Dom'
+import {StoreObserver} from '@/core/StoreObserver'
 
 export class SoundCloud {
   constructor(selector, options = {}) {
     this.$rootElement = $(selector)
     this.components = options.components || []
     this.store = options.store
+    this.observer = new StoreObserver(this.store)
+    this.audio = options.audio
   }
 
   /**
@@ -15,7 +18,8 @@ export class SoundCloud {
   init() {
     const $rootNode = $.create('div', 'soundcloud')
     const componentOptions = {
-      store: this.store
+      store: this.store,
+      audio: this.audio
     }
     this.components = this.components.map(Component => {
       const $componentNode = $.create('div', Component.className)
@@ -25,6 +29,7 @@ export class SoundCloud {
       return component
     })
     this.$rootElement.append($rootNode)
+    this.observer.subscribeComponents(this.components)
     this.components.forEach(component => component.init())
     return true
   }
@@ -34,6 +39,7 @@ export class SoundCloud {
    * @return {bool} Возвращает true
    */
   destroy() {
+    this.observer.unsubscribeFromStore()
     this.components.forEach(component => component.destroy())
     return true
   }
