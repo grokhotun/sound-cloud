@@ -6,6 +6,7 @@ export class BaseComponent extends DomListener {
     this.name = options.name || 'DefaultName'
     this.store = options.store
     this.audio = options.audio
+    this.api = options.api
     this.watch = options.watch || []
     // this.storeSub = null
     this.beforeInit()
@@ -20,6 +21,8 @@ export class BaseComponent extends DomListener {
 
   beforeInit() {
   }
+
+  componentDidMount() {}
 
   init() {
     this.initListeners()

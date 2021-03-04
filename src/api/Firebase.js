@@ -1,10 +1,15 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app';
 import 'firebase/storage'
 
-export class Firebase {
-  constructor(config) {
-    firebase.initilizeApp(config)
+export class FirebaseAPI {
+  constructor(config = {}) {
+    firebase.initializeApp(config)
+    this.storage = firebase.storage()
   }
   get() {}
-  put() {}
+  put(file) {
+    const ref = this.storage.ref(`music/${file.name}`)
+    const task = ref.put(file)
+    return task
+  }
 }

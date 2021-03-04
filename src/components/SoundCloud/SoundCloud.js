@@ -8,6 +8,7 @@ export class SoundCloud {
     this.store = options.store
     this.observer = new StoreObserver(this.store)
     this.audio = options.audio
+    this.api = options.firebase
   }
 
   /**
@@ -19,7 +20,8 @@ export class SoundCloud {
     const $rootNode = $.create('div', 'soundcloud')
     const componentOptions = {
       store: this.store,
-      audio: this.audio
+      audio: this.audio,
+      api: this.api
     }
     this.components = this.components.map(Component => {
       const $componentNode = $.create('div', Component.className)
@@ -30,7 +32,10 @@ export class SoundCloud {
     })
     this.$rootElement.append($rootNode)
     this.observer.subscribeComponents(this.components)
-    this.components.forEach(component => component.init())
+    this.components.forEach(component => {
+      component.init()
+      component.componentDidMount()
+    })
     return true
   }
 
