@@ -47,6 +47,12 @@ export function rootReducer(state, action) {
         isRewinding: action.payload
       }
 
+    case 'UPDATE_TRACKS_FOR_UPLOAD':
+      return {
+        ...state,
+        tracksForUpload: action.payload
+      }
+
     default:
       return state
   }

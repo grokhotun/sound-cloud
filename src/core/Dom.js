@@ -49,6 +49,10 @@ class DOM {
     return $(this.$currentElement.closest(selector))
   }
 
+  find(selector) {
+    return this.$currentElement.querySelector(selector)
+  }
+
   coords() {
     return this.$currentElement.getBoundingClientRect()
   }

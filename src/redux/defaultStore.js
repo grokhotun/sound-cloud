@@ -5,5 +5,6 @@ export const defaultStore = {
   repeat: false,
   currentTrackVolume: 1,
   currentTrackTime: 0,
-  isRewinding: false
+  isRewinding: false,
+  tracksForUpload: []
 }

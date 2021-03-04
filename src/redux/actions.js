@@ -42,3 +42,10 @@ export function updateCurrenttrackVolume(payload) {
     payload
   }
 }
+
+export function updateTracksForUpload(payload) {
+  return {
+    type: 'UPDATE_TRACKS_FOR_UPLOAD',
+    payload
+  }
+}
