@@ -16,6 +16,7 @@ export class StoreObserver {
             if (component.isWatching(key)) {
               const changes = {[key]: state[key]}
               component.$storeHasChanged(changes)
+              component.reRenderComponent()
             }
           })
         }

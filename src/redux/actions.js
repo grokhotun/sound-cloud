@@ -4,9 +4,10 @@ export function toggleShuffle() {
   }
 }
 
-export function togglePlay() {
+export function togglePlay(payload) {
   return {
-    type: 'TOGGLE_PLAY'
+    type: 'TOGGLE_PLAY',
+    payload
   }
 }
 
@@ -74,6 +75,13 @@ export function setTrackList(payload) {
 export function setIsFetching(payload) {
   return {
     type: 'SET_IS_FETCHING',
+    payload
+  }
+}
+
+export function setCurrentTrackId(payload) {
+  return {
+    type: 'SET_CURRENT_TRACK_ID',
     payload
   }
 }

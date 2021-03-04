@@ -1,6 +1,11 @@
 export function createAudioAPI(src = '') {
-  const audio = new Audio(src)
+  let audio = new Audio(src)
   return {
+    init(source = '') {
+      audio.pause()
+      audio = new Audio(source)
+      audio.play()
+    },
     play() {
       audio.play()
     },

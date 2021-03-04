@@ -5,7 +5,8 @@ export const defaultStore = {
   shuffle: false,
   repeat: false,
   currentTrackVolume: 1,
-  currentTrackTime: 0,
+  currentTracktime: 0,
+  currentTrackId: 1,
   isRewinding: false,
   tracksForUpload: [],
   isFetching: true

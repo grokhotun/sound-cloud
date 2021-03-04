@@ -57,7 +57,7 @@ const audio = createAudioAPI(MAX_KORZH)
 const firebase = new FirebaseAPI(firebaseConfig)
 
 store.subscribe(state => {
-  console.log('ActualStore', state)
+  // console.log('ActualStore', state)
   storage('sound-cloud', state)
 })
 

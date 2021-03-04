@@ -18,14 +18,7 @@ export class Player extends StateComponent {
   }
 
   beforeInit() {
-    const initialState = {
-      play: false,
-      mute: false,
-      shuffle: false,
-      repeat: false,
-      currentTracktime: 0
-    }
-    this.useState(initialState)
+    this.useState()
     this.audio.onTimeupdate(() => {
       const {isRewinding} = this.$getState()
       if (!isRewinding) {
@@ -61,10 +54,11 @@ export class Player extends StateComponent {
           isPaused = this.$getState().play
           if (!isPaused) {
             this.audio.play()
+            this.$dispatch(togglePlay(true))
           } else {
             this.audio.pause()
+            this.$dispatch(togglePlay(false))
           }
-          this.$dispatch(togglePlay())
           break;
 
         case 'mute':

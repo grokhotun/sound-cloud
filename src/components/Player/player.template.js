@@ -18,7 +18,6 @@ export function getPlayer(state) {
   const repeatButton = state.repeat ? getButton('redo-alt', 'button--repeat active', 'repeat') : getButton('redo-alt', 'button--repeat', 'repeat')
   const muteUnmuteButton = state.mute ? getButton('volume-mute', '', 'mute') : getButton('volume-up', '', 'mute')
   const volume = transformRange(state.currentTrackVolume, {min: 0, max: 1}, {min: 0, max: 70}, false)
-  console.log(volume)
   const currentTrackVolume = `${volume}px`
   const currentTracktime = `${state.currentTracktime}px`
   return `

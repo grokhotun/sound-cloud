@@ -9,10 +9,9 @@ export function rootReducer(state, action) {
       }
 
     case 'TOGGLE_PLAY':
-      prevState = state.play
       return {
         ...state,
-        play: !prevState
+        play: action.payload
       }
 
     case 'TOGGLE_MUTE':
@@ -76,6 +75,12 @@ export function rootReducer(state, action) {
       return {
         ...state,
         isFetching: action.payload
+      }
+
+    case 'SET_CURRENT_TRACK_ID':
+      return {
+        ...state,
+        currentTrackId: action.payload
       }
 
     default:

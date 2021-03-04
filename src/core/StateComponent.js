@@ -20,6 +20,10 @@ export class StateComponent extends BaseComponent {
       ...this.state,
       ...newState
     }
+    this.reRenderComponent()
+  }
+
+  reRenderComponent() {
     this.$root.html(this.template)
   }
 }
