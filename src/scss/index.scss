@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 @import "~normalize.css";
 @import "_variables.scss";
+@import "_ui.scss";
 
 @import "player.scss";
 @import "track-list.scss";
+@import "uploader.scss";
 
 * {
   margin: 0;
@@ -20,6 +22,10 @@
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
+}
+
+input[type='file'] {
+  display: none;
 }
 
 .soundcloud {
