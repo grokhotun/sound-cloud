@@ -49,3 +49,31 @@ export function updateTracksForUpload(payload) {
     payload
   }
 }
+
+export function uploadTracks() {
+  return {
+    type: 'UPLOAD_TRACKS'
+
+  }
+}
+
+export function setUploadProgress(payload) {
+  return {
+    type: 'SET_UPLOAD_PROGRESS',
+    payload
+  }
+}
+
+export function setTrackList(payload) {
+  return {
+    type: 'SET_TRACK_LIST',
+    payload
+  }
+}
+
+export function setIsFetching(payload) {
+  return {
+    type: 'SET_IS_FETCHING',
+    payload
+  }
+}

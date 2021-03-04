@@ -2,10 +2,12 @@
 @import "~normalize.css";
 @import "_variables.scss";
 @import "_ui.scss";
+@import "_mixins.scss";
 
 @import "player.scss";
 @import "track-list.scss";
 @import "uploader.scss";
+@import "loader.scss";
 
 * {
   margin: 0;

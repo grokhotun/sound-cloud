@@ -1,4 +1,5 @@
 export const defaultStore = {
+  trackList: [],
   play: false,
   mute: false,
   shuffle: false,
@@ -6,5 +7,6 @@ export const defaultStore = {
   currentTrackVolume: 1,
   currentTrackTime: 0,
   isRewinding: false,
-  tracksForUpload: []
+  tracksForUpload: [],
+  isFetching: true
 }

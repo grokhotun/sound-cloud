@@ -53,6 +53,31 @@ export function rootReducer(state, action) {
         tracksForUpload: action.payload
       }
 
+    case 'SET_UPLOAD_PROGRESS':
+      const newArray = []
+      const {idx, percentage} = action.payload
+      const file = state.tracksForUpload[idx].file
+      newArray[idx] = {
+        file,
+        uploadProgress: percentage
+      }
+      return {
+        ...state,
+        tracksForUpload: newArray
+      }
+
+    case 'SET_TRACK_LIST':
+      return {
+        ...state,
+        trackList: action.payload
+      }
+
+    case 'SET_IS_FETCHING':
+      return {
+        ...state,
+        isFetching: action.payload
+      }
+
     default:
       return state
   }

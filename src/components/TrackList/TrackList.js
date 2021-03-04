@@ -1,49 +1,40 @@
-import {BaseComponent} from '@/core/BaseComponent';
+import {getTracklist} from '@/components/TrackList/tracklist.template';
+import {$} from '@/core/Dom';
+import {StateComponent} from '@/core/StateComponent';
 
-export class TrackList extends BaseComponent {
+export class TrackList extends StateComponent {
   static className = 'track-list'
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Player',
-      listeners: []
+      listeners: ['click'],
+      watch: ['trackList', 'isFetching'],
+      ...options
     })
   }
 
+  $storeHasChanged(changes) {
+    console.log(changes)
+    this.setState()
+  }
+
+  get template() {
+    return getTracklist(this.$getState())
+  }
+
   renderComponent() {
-    return `
-        <li class="track-list__item">
-          <div class="button">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="track-list__number">1</div>
-          <div class="track-list__name">Макс Корж - Свитер</div>
-          <div class="track-list__size">9 МБ</div>
-        </li>
-        <li class="track-list__item">
-          <div class="button">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="track-list__number">2</div>
-          <div class="track-list__name">Макс Корж - Свитер</div>
-          <div class="track-list__size">9 МБ</div>
-        </li>
-        <li class="track-list__item">
-          <div class="button">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="track-list__number">3</div>
-          <div class="track-list__name">Макс Корж - Свитер</div>
-          <div class="track-list__size">9 МБ</div>
-        </li>
-        <li class="track-list__item">
-          <div class="button">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="track-list__number">4</div>
-          <div class="track-list__name">Макс Корж - Свитер</div>
-          <div class="track-list__size">9 МБ</div>
-        </li>
-    `
+    return this.template
+  }
+
+  onClick(event) {
+    const $target = $(event.target)
+    const $button = $target.closest('[data-type="button"]')
+    const $trackItem = $target.closest('[data-type="track-item"]')
+    if ($button.currentElement) {
+      if ($button.attr('data-action') === 'play') {
+        console.log($trackItem.attr('data-id'))
+      }
+    }
   }
 }

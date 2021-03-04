@@ -10,5 +10,25 @@
   &__btn {
   }
   &__files-list {
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      @include clear-list;
+      padding: 10px 5px;
+      &__info {}
+      &__progress {
+        position: relative;
+        width: 100px;
+        height: 5px;
+        .progress-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 0;
+          height: 100%;
+          background-color: red;
+        }
+      }
+    }
   }
 }
