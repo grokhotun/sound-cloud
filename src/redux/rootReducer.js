@@ -53,16 +53,11 @@ export function rootReducer(state, action) {
       }
 
     case 'SET_UPLOAD_PROGRESS':
-      const newArray = []
       const {idx, percentage} = action.payload
-      const file = state.tracksForUpload[idx].file
-      newArray[idx] = {
-        file,
-        uploadProgress: percentage
-      }
+      const arrObject = state.tracksForUpload.map((item, index) => index === idx ? Object.assign({}, item, {uploadProgress: percentage}) : item)
       return {
         ...state,
-        tracksForUpload: newArray
+        tracksForUpload: arrObject
       }
 
     case 'SET_TRACK_LIST':

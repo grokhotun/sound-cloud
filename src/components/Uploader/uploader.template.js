@@ -2,7 +2,7 @@ export function getUploader(state) {
   const template = tracksForUpload(state.tracksForUpload)
   return `
       <div class="uploader__buttons">
-        <input id="file" accept=".mp3,audio/* multiple="true" type="file" class="uploader__input">
+        <input id="file" accept=".mp3,audio/*" multiple="true" type="file" class="uploader__input">
         <button data-action="open" class="uploader__btn">Открыть</button>
         <button data-action ="upload" class="uploader__btn">Загрузить на сервер</button>
       </div>
@@ -13,11 +13,12 @@ export function getUploader(state) {
 function tracksForUpload(tracks) {
   if (tracks.length) {
     const listTemplate = tracks.map((track, idx) => {
+      const backgroundStyle = track.uploadProgress === 100 ? 'background-color: green;' : ''
       return `
       <li class="list-item">
         <div class="list-item__info">${idx + 1} ${track.file.name}</div>
         <div class="list-item__progress">
-          <div style="width: ${track.uploadProgress || 0}%" data-id="${idx}" class="progress-bar"></div>
+          <div style="${backgroundStyle} width: ${track.uploadProgress || 0}%" data-id="${idx}" class="progress-bar"></div>
         </div>
       </li>`
     })

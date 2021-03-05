@@ -7,9 +7,8 @@ import {createStore} from '@/core/createStore';
 import {storage} from '@/core/utils';
 import {rootReducer} from '@/redux/rootReducer';
 import {defaultStore} from '@/redux/defaultStore';
-import {createAudioAPI} from './core/Audio';
-import {MAX_KORZH} from '@/core/consts'
 import {FirebaseAPI} from '@/api/Firebase';
+import {AudioAPI} from '@/core/AudioAPI';
 import '@/scss/index.scss'
 
 const firebaseConfig = {
@@ -21,43 +20,12 @@ const firebaseConfig = {
   appId: '1:360477666381:web:143ac502ef8a5b1b93c004'
 }
 
-// document.querySelector('input').addEventListener('change', e => {
-//   const currentFile = e.target.files[0]
-//   const ref = storage.ref(`music/${currentFile.name}`)
-//   const task = ref.put(currentFile)
-//   task.on('state_change', snapshot => {
-//     const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-//     console.log(`${percentage} %`)
-//   }, error => {
-//     console.log(`Some ${error} occured`)
-//   }, () => {
-//     console.log('Completed')
-//     task.snapshot.ref.getDownloadURL().then(url => console.log(url))
-//   })
-// })
-
-// document.querySelector('#get-data').addEventListener('click', e => {
-//   storage.ref().child('music/').listAll().then(res => {
-//     res.items.forEach(item => {
-//       console.log(item.name)
-//       item.getDownloadURL().then(url => console.log(url))
-//     })
-//   })
-// })
-
-// firebase.initializeApp(firebaseConfig)
-
-// const storage = firebase.storage()
-
-// console.log(storage)
-
-
 const store = createStore(defaultStore, rootReducer)
-const audio = createAudioAPI(MAX_KORZH)
+const audio = new AudioAPI()
 const firebase = new FirebaseAPI(firebaseConfig)
 
 store.subscribe(state => {
-  // console.log('ActualStore', state)
+  console.log('ActualStore', state)
   storage('sound-cloud', state)
 })
 

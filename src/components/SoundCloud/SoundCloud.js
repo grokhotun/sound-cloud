@@ -1,3 +1,4 @@
+import {AudioObserver} from '@/core/AudioObserver'
 import {$} from '@/core/Dom'
 import {StoreObserver} from '@/core/StoreObserver'
 
@@ -6,8 +7,9 @@ export class SoundCloud {
     this.$rootElement = $(selector)
     this.components = options.components || []
     this.store = options.store
-    this.observer = new StoreObserver(this.store)
     this.audio = options.audio
+    this.storeObserver= new StoreObserver(this.store)
+    this.audioObserver = new AudioObserver(this.audio)
     this.api = options.firebase
   }
 
@@ -31,7 +33,8 @@ export class SoundCloud {
       return component
     })
     this.$rootElement.append($rootNode)
-    this.observer.subscribeComponents(this.components)
+    this.storeObserver.subscribeComponents(this.components)
+    this.audioObserver.subscribeComponents(this.components)
     this.components.forEach(component => {
       component.init()
       component.componentDidMount()
@@ -44,7 +47,8 @@ export class SoundCloud {
    * @return {bool} Возвращает true
    */
   destroy() {
-    this.observer.unsubscribeFromStore()
+    this.storeObserver.unsubscribeFromStore()
+    this.audioObserver.unsubscribeFromAudio()
     this.components.forEach(component => component.destroy())
     return true
   }

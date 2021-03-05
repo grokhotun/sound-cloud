@@ -5,15 +5,12 @@ export function dragHandler(event, sliderType, audio) {
     const $target = $(event.target)
     const $slider = $(document.querySelector(`[data-type="${sliderType}"]`))
     const sliderCoords = $slider.coords()
-    let delta
+    let delta = event.pageX - sliderCoords.left
+
+    delta = checkDelta(delta, sliderCoords)
 
     document.onmousemove = e => {
-      delta = e.pageX - sliderCoords.left
-      if (delta > sliderCoords.width) {
-        delta = sliderCoords.width
-      } else if (delta < 0) {
-        delta = 0
-      }
+      delta = checkDelta(e.pageX - sliderCoords.left, sliderCoords)
       $target.css({
         left: `${delta}px`
       })
@@ -34,4 +31,14 @@ export function getHandleType(event) {
   } else {
     return ''
   }
+}
+
+function checkDelta(value, sliderCoords) {
+  let delta = value
+  if (delta > sliderCoords.width) {
+    delta = sliderCoords.width
+  } else if (delta < 0) {
+    delta = 0
+  }
+  return delta
 }

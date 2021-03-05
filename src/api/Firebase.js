@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/storage'
-
+import {formatBytes} from '@/core/utils'
 export class FirebaseAPI {
   constructor(config = {}) {
     firebase.initializeApp(config)
@@ -13,8 +13,10 @@ export class FirebaseAPI {
     const {items} = await folder.listAll()
     for (const itemRef of items) {
       const url = await itemRef.getDownloadURL()
+      const meta = await itemRef.getMetadata()
       result.push({
         name: itemRef.name,
+        size: formatBytes(meta.size),
         url
       })
     }

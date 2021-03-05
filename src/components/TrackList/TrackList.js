@@ -1,8 +1,7 @@
 import {getTracklist} from '@/components/TrackList/tracklist.template'
 import {$} from '@/core/Dom'
 import {StateComponent} from '@/core/StateComponent'
-import {setCurrentTrackId, togglePlay, updateCurrentTracktime} from '@/redux/actions'
-import {transformRange} from '@/core/utils'
+import {setCurrentTrackId, togglePlay} from '@/redux/actions'
 
 export class TrackList extends StateComponent {
   static className = 'track-list'
@@ -33,19 +32,13 @@ export class TrackList extends StateComponent {
     const $trackItem = $target.closest('[data-type="track-item"]')
     if ($button.currentElement) {
       if ($button.attr('data-action') === 'play') {
-        const {trackList, currentTrackId} = this.$getState()
+        const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
         const id = +$trackItem.attr('data-id')
         if (!(currentTrackId === id)) {
-          this.audio.init(trackList[id].url)
-          this.audio.onTimeupdate(() => {
-            const {isRewinding} = this.$getState()
-            if (!isRewinding) {
-              const trackTime = transformRange(this.audio.currentTime(), {min: 0, max: this.audio.trackDuration()}, {min: 0, max: 478})
-              this.$dispatch(updateCurrentTracktime(trackTime))
-            }
-          })
+          this.audio.init(trackList[id].url, {volume: currentTrackVolume})
           this.$dispatch(setCurrentTrackId(id))
           this.$dispatch(togglePlay(true))
+          this.audio.play()
         } else {
           this.audio.play()
           this.$dispatch(togglePlay(true))

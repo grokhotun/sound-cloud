@@ -1,3 +1,7 @@
+export const toggleTest = (payload) => dispatch => {
+  dispatch({type: 'TEST', payload})
+}
+
 export function toggleShuffle() {
   return {
     type: 'TOGGLE_SHUFFLE'

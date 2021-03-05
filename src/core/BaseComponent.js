@@ -34,6 +34,8 @@ export class BaseComponent extends DomListener {
 
   $storeHasChanged() {}
 
+  $audioHasChanged() {}
+
   isWatching(key) {
     return this.watch.includes(key)
   }

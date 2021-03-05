@@ -1,8 +1,9 @@
 import {$} from '@/core/Dom';
 import {getUploader} from '@/components/Uploader/uploader.template';
-import {setIsFetching, setTrackList, updateTracksForUpload} from '@/redux/actions'
+import {setCurrentTrackId, setIsFetching, setTrackList, updateTracksForUpload} from '@/redux/actions'
 import {StateComponent} from '@/core/StateComponent';
 import {setUploadProgress} from '@/redux/actions'
+// import {transformRange} from '@/core/utils';
 
 export class Uploader extends StateComponent {
   static className = 'uploader'
@@ -23,15 +24,13 @@ export class Uploader extends StateComponent {
     setTimeout(() => {
       this.$dispatch(setIsFetching(false))
     }, 2000)
+    const {trackList, currentTrackVolume} = this.$getState()
+    this.$dispatch(setCurrentTrackId(0))
+    this.audio.init(trackList[0].url, {volume: currentTrackVolume})
   }
 
   componentDidMount() {
     this.fetchData()
-  }
-
-  $storeHasChanged(changes) {
-    console.log(changes)
-    this.setState()
   }
 
   get template() {
@@ -42,13 +41,7 @@ export class Uploader extends StateComponent {
     return this.template
   }
 
-  changeHandler() {
-
-  }
-
   onChange(e) {
-    // const tracksName = []
-
     if (!e.target.files.length) {
       return
     }
@@ -79,11 +72,11 @@ export class Uploader extends StateComponent {
         const task = this.api.put(track.file)
         task.on('state-change', snapshot => {
           const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          // document.querySelector(`[data-id="${idx}"`).style.width = `${percentage}px`
           this.$dispatch(setUploadProgress({idx, percentage}))
-        }, error => {},
+        }, error => {
+          console.log(`Some ${error} has occured`)
+        },
         async () => {
-          document.querySelector(`[data-id="${idx}"`).style.backgroundColor = 'green';
           this.fetchData()
         })
       })
