@@ -25,10 +25,12 @@ const audio = new AudioAPI()
 const firebase = new FirebaseAPI(firebaseConfig)
 
 store.subscribe(state => {
+  console.log(state)
   storage('sound-cloud', state)
 })
 
 audio.subscribe(state => {
+  // console.log(state)
 })
 
 const soundClound = new SoundCloud('#root', {

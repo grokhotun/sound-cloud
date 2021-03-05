@@ -14,11 +14,11 @@ export function getTracklist(state) {
 }
 
 function getTrack(track, idx, currentTrackId, isPlaying) {
-  const playPauseButton = currentTrackId === idx && isPlaying ? getButton('pause', '', 'pause') : getButton('play', '', 'play')
+  const playPauseButton = currentTrackId === track.hash && isPlaying ? getButton('pause', '', 'pause') : getButton('play', '', 'play')
   return `
     <li
       data-type="track-item"
-      data-id="${idx}"
+      data-id="${track.hash}"
       class="track-list__item">
       ${playPauseButton}
       <div class="track-list__number">${idx + 1}</div>

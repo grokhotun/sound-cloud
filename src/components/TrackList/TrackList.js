@@ -33,9 +33,10 @@ export class TrackList extends StateComponent {
     if ($button.currentElement) {
       if ($button.attr('data-action') === 'play') {
         const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
-        const id = +$trackItem.attr('data-id')
+        const id = $trackItem.attr('data-id')
         if (!(currentTrackId === id)) {
-          this.audio.init(trackList[id].url, {volume: currentTrackVolume})
+          const nextTrackId = trackList.map(e => e.hash).indexOf(id)
+          this.audio.init(trackList[nextTrackId].url, {volume: currentTrackVolume})
           this.$dispatch(setCurrentTrackId(id))
           this.$dispatch(togglePlay(true))
           this.audio.play()
