@@ -17,6 +17,7 @@ export class FirebaseAPI {
       result.push({
         name: itemRef.name,
         size: formatBytes(meta.size),
+        hash: meta.md5Hash,
         url
       })
     }
