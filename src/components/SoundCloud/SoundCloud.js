@@ -1,5 +1,5 @@
-import {AudioObserver} from '@/core/AudioObserver'
 import {$} from '@/core/Dom'
+import {AudioObserver} from '@/core/AudioObserver'
 import {StoreObserver} from '@/core/StoreObserver'
 
 export class SoundCloud {
@@ -33,12 +33,10 @@ export class SoundCloud {
       return component
     })
     this.$rootElement.append($rootNode)
+    this.components.forEach(component => component.componentDidMount())
     this.storeObserver.subscribeComponents(this.components)
     this.audioObserver.subscribeComponents(this.components)
-    this.components.forEach(component => {
-      component.init()
-      component.componentDidMount()
-    })
+    this.components.forEach(component => component.init())
     return true
   }
 
