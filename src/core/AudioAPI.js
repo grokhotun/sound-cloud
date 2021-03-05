@@ -9,6 +9,7 @@ export class AudioAPI {
       isPlaying: !this.audio.paused,
       isMuted: this.audio.muted,
       isLopped: this.audio.loop,
+      isEnded: this.audio.ended,
       currentTime: Math.floor(this.audio.currentTime) || 0,
       currentVolume: this.audio.volume,
       readyState: this.audio.readyState,

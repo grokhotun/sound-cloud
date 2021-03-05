@@ -1,6 +1,6 @@
+import {$} from '@/core/Dom'
 import {dragHandler, getHandleType} from '@/components/Player/player.functions'
 import {getPlayer} from '@/components/Player/player.template'
-import {$} from '@/core/Dom'
 import {StateComponent} from '@/core/StateComponent'
 import {transformRange} from '@/core/utils'
 import {togglePlay, toggleShuffle, toggleRepeat, toggleMute, setIsRewinding, updateCurrenttrackVolume, setCurrentTrackId, updateCurrentTracktime} from '@/redux/actions'
@@ -11,7 +11,7 @@ export class Player extends StateComponent {
     super($root, {
       name: 'Player',
       listeners: ['mousedown', 'click'],
-      watch: ['play', 'mute', 'shuffle', 'repeat', 'currentTracktime', 'currentTime'],
+      watch: ['play', 'mute', 'shuffle', 'repeat', 'currentTracktime', 'currentTime', 'isEnded'],
       ...options
     })
   }
@@ -22,11 +22,14 @@ export class Player extends StateComponent {
 
   $storeHasChanged() {}
 
-  $audioHasChanged({currentTime}) {
+  $audioHasChanged({isEnded, currentTime}) {
     const {isRewinding} = this.$getState()
     if (!isRewinding && this.audio.getState.trackDuration) {
       const trackTime = transformRange(currentTime, {min: 0, max: this.audio.trackDuration}, {min: 0, max: 478})
       this.$dispatch(updateCurrentTracktime(trackTime))
+    }
+    if (isEnded) {
+      this.switchTrack('next')
     }
   }
 
@@ -41,10 +44,9 @@ export class Player extends StateComponent {
   onClick(event) {
     const $target = $(event.target)
     const $button = $target.closest('[data-type="button"]')
-    const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
-    let newTrackId = 0
     if ($button.currentElement) {
-      switch ($button.attr('data-action')) {
+      const action = $button.attr('data-action')
+      switch (action) {
         case 'play':
           this.audio.play()
           this.$dispatch(togglePlay(this.audio.getState.isPlaying))
@@ -65,27 +67,11 @@ export class Player extends StateComponent {
           break
 
         case 'next':
-          if (currentTrackId + 1 < trackList.length) {
-            newTrackId = currentTrackId + 1
-            this.$dispatch(setCurrentTrackId(newTrackId))
-            this.audio.init(trackList[newTrackId].url, {volume: currentTrackVolume})
-            this.audio.play()
-            this.$dispatch(togglePlay(true))
-          } else {
-            return
-          }
+          this.switchTrack(action)
           break
 
         case 'prev':
-          if (currentTrackId - 1 >= 0) {
-            newTrackId = currentTrackId - 1
-            this.$dispatch(setCurrentTrackId(newTrackId))
-            this.audio.init(trackList[newTrackId].url, {volume: currentTrackVolume})
-            this.audio.play()
-            this.$dispatch(togglePlay(true))
-          } else {
-            return
-          }
+          this.switchTrack(action)
           break
 
         default:
@@ -108,6 +94,32 @@ export class Player extends StateComponent {
       this.audio.volume(newVolumeValue)
       this.$dispatch(updateCurrenttrackVolume(newVolumeValue))
       this.$dispatch(setIsRewinding(false))
+    }
+  }
+
+  switchTrack(direction) {
+    let newTrackId = 0
+    const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
+    if (direction === 'next') {
+      if (currentTrackId + 1 < trackList.length) {
+        newTrackId = currentTrackId + 1
+        this.$dispatch(setCurrentTrackId(newTrackId))
+        this.audio.init(trackList[newTrackId].url, {volume: currentTrackVolume})
+        this.audio.play()
+        this.$dispatch(togglePlay(true))
+      } else {
+        return
+      }
+    } else if (direction === 'prev') {
+      if (currentTrackId - 1 >= 0) {
+        newTrackId = currentTrackId - 1
+        this.$dispatch(setCurrentTrackId(newTrackId))
+        this.audio.init(trackList[newTrackId].url, {volume: currentTrackVolume})
+        this.audio.play()
+        this.$dispatch(togglePlay(true))
+      } else {
+        return
+      }
     }
   }
 }
