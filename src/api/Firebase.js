@@ -15,7 +15,7 @@ export class FirebaseAPI {
       const url = await itemRef.getDownloadURL()
       const meta = await itemRef.getMetadata()
       result.push({
-        name: itemRef.name,
+        name: itemRef.name.replace('.mp3', ''),
         size: formatBytes(meta.size),
         hash: meta.md5Hash,
         url
