@@ -21,12 +21,10 @@ export class Uploader extends StateComponent {
     this.$dispatch(setIsFetching(true))
     const data = await this.api.fetchData()
     this.$dispatch(setTrackList(data))
-    setTimeout(() => {
-      this.$dispatch(setIsFetching(false))
-    }, 2000)
     const {trackList, currentTrackVolume} = this.$getState()
     this.$dispatch(setCurrentTrackId(0))
     this.audio.init(trackList[0].url, {volume: currentTrackVolume})
+    this.$dispatch(setIsFetching(false))
   }
 
   componentDidMount() {
