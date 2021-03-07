@@ -19,7 +19,7 @@ export function getPlayer(state) {
   const muteUnmuteButton = state.mute ? getButton('volume-mute', '', 'mute') : getButton('volume-up', '', 'mute')
   const volume = transformRange(state.currentTrackVolume, {min: 0, max: 1}, {min: 0, max: 70}, false)
   const currentTrackVolume = `${volume}px`
-  const currentTracktime = `${state.currentTracktime}px`
+  const currentAudioHandlePosition = `${state.currentAudioHandlePosition}px`
   return `
     <div class="player__col player__col--first">
       <div class="player__buttons">
@@ -29,7 +29,7 @@ export function getPlayer(state) {
     </div>
     <div class="player__track-slider">
       <div data-type="track-slider" class="track-slider"></div>
-      <div style="left: ${currentTracktime}" data-handle="track" class="track-handler"></div>
+      <div style="left: ${currentAudioHandlePosition}" data-handle="track" class="track-handler"></div>
     </div>
     </div>
     <div class="player__col player__col--second">

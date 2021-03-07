@@ -27,13 +27,6 @@ export function toggleRepeat() {
   }
 }
 
-export function updateCurrentTracktime(payload) {
-  return {
-    type: 'UPDATE_CURRENT_TRACKTIME',
-    payload
-  }
-}
-
 export function setIsRewinding(payload) {
   return {
     type: 'SET_IS_REWINDING',
@@ -86,6 +79,20 @@ export function setIsFetching(payload) {
 export function setCurrentTrackId(payload) {
   return {
     type: 'SET_CURRENT_TRACK_ID',
+    payload
+  }
+}
+
+export function setCurrentAudioTimePosition(payload) {
+  return {
+    type: 'SET_CURRENT_AUDIO_TIME_POSITION',
+    payload
+  }
+}
+
+export function setCurrentAudioHandlePosition(payload) {
+  return {
+    type: 'SET_CURRENT_AUDIO_HANDLE_POSITION',
     payload
   }
 }

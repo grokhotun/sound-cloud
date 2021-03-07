@@ -3,6 +3,7 @@ import {getUploader} from '@/components/Uploader/uploader.template';
 import {setCurrentTrackId, setIsFetching, setTrackList, updateTracksForUpload} from '@/redux/actions'
 import {StateComponent} from '@/core/StateComponent';
 import {setUploadProgress} from '@/redux/actions'
+import {getTrackIdByHash} from '@/core/utils';
 // import {transformRange} from '@/core/utils';
 
 export class Uploader extends StateComponent {
@@ -22,9 +23,17 @@ export class Uploader extends StateComponent {
     const data = await this.api.fetchData()
     if (data.length > 0) {
       this.$dispatch(setTrackList(data))
-      const {trackList, currentTrackVolume} = this.$getState()
-      this.$dispatch(setCurrentTrackId(trackList[0].hash))
-      this.audio.init(trackList[0].url, {volume: currentTrackVolume})
+      const {trackList, currentTrackVolume, currentTrackId, currentAudioTimePosition, mute, play, repeat} = this.$getState()
+      const options = {
+        currentTime: currentAudioTimePosition,
+        volume: currentTrackVolume,
+        muted: mute,
+        loop: repeat,
+        play: play
+      }
+      this.$dispatch(setCurrentTrackId(currentTrackId))
+      const $currentTrackId = getTrackIdByHash(trackList, currentTrackId)
+      this.audio.init(trackList[$currentTrackId].url, options)
     }
     this.$dispatch(setIsFetching(false))
   }

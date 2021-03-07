@@ -6,9 +6,9 @@ import {Uploader} from '@/components/Uploader/Uploader';
 import {createStore} from '@/core/createStore';
 import {storage} from '@/core/utils';
 import {rootReducer} from '@/redux/rootReducer';
-import {defaultStore} from '@/redux/defaultStore';
 import {FirebaseAPI} from '@/api/Firebase';
 import {AudioAPI} from '@/core/AudioAPI';
+import {normalizeInitialState} from '@/redux/store';
 import '@/scss/index.scss'
 
 const firebaseConfig = {
@@ -20,24 +20,22 @@ const firebaseConfig = {
   appId: '1:360477666381:web:143ac502ef8a5b1b93c004'
 }
 
-const store = createStore(defaultStore, rootReducer)
+const store = createStore(normalizeInitialState(storage('sound-cloud')), rootReducer)
 const audio = new AudioAPI()
 const firebase = new FirebaseAPI(firebaseConfig)
 
 store.subscribe(state => {
-  console.log(state)
   storage('sound-cloud', state)
 })
 
 audio.subscribe(state => {
-  // console.log(state)
 })
 
-const soundClound = new SoundCloud('#root', {
+const soundCloud = new SoundCloud('#root', {
   components: [Header, Player, Uploader, TrackList],
   store,
   audio,
   firebase
 })
 
-soundClound.init()
+soundCloud.init()

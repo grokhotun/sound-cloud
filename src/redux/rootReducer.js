@@ -28,12 +28,6 @@ export function rootReducer(state, action) {
         repeat: !prevState
       }
 
-    case 'UPDATE_CURRENT_TRACKTIME':
-      return {
-        ...state,
-        currentTracktime: action.payload
-      }
-
     case 'UPDATE_CURRENT_TRACKVOLUME':
       return {
         ...state,
@@ -76,6 +70,18 @@ export function rootReducer(state, action) {
       return {
         ...state,
         currentTrackId: action.payload
+      }
+
+    case 'SET_CURRENT_AUDIO_TIME_POSITION':
+      return {
+        ...state,
+        currentAudioTimePosition: action.payload
+      }
+
+    case 'SET_CURRENT_AUDIO_HANDLE_POSITION':
+      return {
+        ...state,
+        currentAudioHandlePosition: action.payload
       }
 
     default:

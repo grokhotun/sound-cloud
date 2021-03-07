@@ -2,8 +2,9 @@ import {$} from '@/core/Dom'
 import {dragHandler, getHandleType} from '@/components/Player/player.functions'
 import {getPlayer} from '@/components/Player/player.template'
 import {StateComponent} from '@/core/StateComponent'
-import {transformRange} from '@/core/utils'
-import {togglePlay, toggleShuffle, toggleRepeat, toggleMute, setIsRewinding, updateCurrenttrackVolume, setCurrentTrackId, updateCurrentTracktime} from '@/redux/actions'
+import {getTrackIdByHash, transformRange} from '@/core/utils'
+import {togglePlay, toggleShuffle, toggleRepeat, toggleMute, setIsRewinding, updateCurrenttrackVolume, setCurrentTrackId, setCurrentAudioHandlePosition} from '@/redux/actions'
+import {setCurrentAudioTimePosition} from '@/redux/actions';
 export class Player extends StateComponent {
   static className = 'player'
 
@@ -11,7 +12,7 @@ export class Player extends StateComponent {
     super($root, {
       name: 'Player',
       listeners: ['mousedown', 'click', 'touchstart'],
-      watch: ['play', 'mute', 'shuffle', 'repeat', 'currentTracktime', 'currentTime', 'isEnded'],
+      watch: ['play', 'mute', 'shuffle', 'repeat', 'currentAudioHandlePosition', 'currentTime', 'isEnded'],
       ...options
     })
   }
@@ -28,7 +29,8 @@ export class Player extends StateComponent {
     const maxSliderLength = $slider.coords().width
     if (!isRewinding && this.audio.getState.trackDuration) {
       const trackTime = transformRange(currentTime, {min: 0, max: this.audio.trackDuration}, {min: 0, max: maxSliderLength})
-      this.$dispatch(updateCurrentTracktime(trackTime))
+      this.$dispatch(setCurrentAudioHandlePosition(trackTime))
+      this.$dispatch(setCurrentAudioTimePosition(currentTime))
     }
     if (isEnded) {
       this.switchTrack('next')
@@ -86,67 +88,69 @@ export class Player extends StateComponent {
   }
 
   async onMousedown(event) {
+    this.$dispatch(setIsRewinding(true))
     if (getHandleType(event) === 'track') {
       const $slider = $(document.querySelector('[data-type="track-slider"]'))
-      this.$dispatch(setIsRewinding(true))
       const rewindingTime = await dragHandler(event, 'track-slider')
       const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.trackDuration || 300})
       this.audio.rewind(trackTime)
-      this.$dispatch(setIsRewinding(false))
     } else if (getHandleType(event) === 'volume') {
-      this.$dispatch(setIsRewinding(true))
       const volumeValue = await dragHandler(event, 'volume-slider')
       const newVolumeValue = transformRange(volumeValue, {min: 0, max: 70}, {min: 0, max: 1}, false)
       this.audio.volume(newVolumeValue)
       this.$dispatch(updateCurrenttrackVolume(newVolumeValue))
-      this.$dispatch(setIsRewinding(false))
     }
+    this.$dispatch(setIsRewinding(false))
   }
 
   async onTouchstart(event) {
+    this.$dispatch(setIsRewinding(true))
     if (getHandleType(event) === 'track') {
       const $slider = $(document.querySelector('[data-type="track-slider"]'))
-      this.$dispatch(setIsRewinding(true))
       const rewindingTime = await dragHandler(event, 'track-slider')
       const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.trackDuration || 300})
       this.audio.rewind(trackTime)
-      this.$dispatch(setIsRewinding(false))
     } else if (getHandleType(event) === 'volume') {
-      this.$dispatch(setIsRewinding(true))
       const volumeValue = await dragHandler(event, 'volume-slider')
       const newVolumeValue = transformRange(volumeValue, {min: 0, max: 70}, {min: 0, max: 1}, false)
       this.audio.volume(newVolumeValue)
       this.$dispatch(updateCurrenttrackVolume(newVolumeValue))
-      this.$dispatch(setIsRewinding(false))
     }
+    this.$dispatch(setIsRewinding(false))
   }
 
   switchTrack(direction) {
     let newTrackId = 0
     let trackHash = ''
-    const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
-    const $currentTrackId = trackList.map(track => track.hash).indexOf(currentTrackId)
+    const {trackList, currentTrackId, currentTrackVolume, currentAudioTimePosition, mute, repeat} = this.$getState()
+    const $currentTrackId = getTrackIdByHash(trackList, currentTrackId)
+    const options = {
+      currentTime: currentAudioTimePosition,
+      volume: currentTrackVolume,
+      muted: mute,
+      loop: repeat
+    }
     if (direction === 'next') {
       if ($currentTrackId + 1 < trackList.length) {
         newTrackId = $currentTrackId + 1
         trackHash = trackList[newTrackId].hash
         this.$dispatch(setCurrentTrackId(trackHash))
-        this.audio.init(trackList[newTrackId].url, {volume: currentTrackVolume})
+        this.audio.init(trackList[newTrackId].url, options)
         this.audio.play()
         this.$dispatch(togglePlay(true))
       } else {
-        return
+        return true
       }
     } else if (direction === 'prev') {
       if ($currentTrackId - 1 >= 0) {
         newTrackId = $currentTrackId - 1
         trackHash = trackList[newTrackId].hash
         this.$dispatch(setCurrentTrackId(trackHash))
-        this.audio.init(trackList[newTrackId].url, {volume: currentTrackVolume})
+        this.audio.init(trackList[newTrackId].url, options)
         this.audio.play()
         this.$dispatch(togglePlay(true))
       } else {
-        return
+        return true
       }
     }
   }

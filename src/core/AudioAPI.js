@@ -35,15 +35,13 @@ export class AudioAPI {
   }
 
   init(src, options) {
+    this.audio.currentTime = options.currentTime || 0
+    this.audio.volume = options.volume || 1
+    this.audio.muted = options.muted || false
+    this.audio.loop = options.loop || false
     this.audio.src = src
-    this.audio.currentTime = 0
     this.audio.ontimeupdate = () => this.emit(this.getState)
     this.audio.onended = () => this.emit(this.getState)
-    if (options) {
-      this.audio.volume = options.volume
-      this.audio.muted = options.muted
-      this.audio.loop = options.loop
-    }
   }
 
   play() {
