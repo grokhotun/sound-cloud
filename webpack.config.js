@@ -4,13 +4,14 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
 
 
-const filename = (ext) => isDevelopment ? `bundle.${ext}` : `bundle.[hash].${ext}`
+const filename = (ext) => isDevelopment ? `[name].${ext}` : `[name].[hash].${ext}`
 
 const getJsLoaders = () => {
   const loaders = ['babel-loader']
@@ -20,6 +21,40 @@ const getJsLoaders = () => {
   }
 
   return loaders
+}
+
+const getPlugins = () => {
+  const basePlugins =[
+    new CleanWebpackPlugin(),
+    new HTMLWebpackPlugin({
+      template: 'index.html',
+      // Минифицируем HTML код в production версиях
+      minify: {
+        removeComments: isProduction,
+        collapseWhitespace: isProduction,
+      },
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/favicon.ico'),
+          to: path.resolve(__dirname, 'build'),
+        },
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: filename('css'),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
+  ]
+
+  if (isDevelopment) {
+    basePlugins.push(new BundleAnalyzerPlugin())
+  }
+
+  return basePlugins
 }
 
 module.exports = {
@@ -47,31 +82,12 @@ module.exports = {
     hot: isDevelopment,
   },
   target: 'web',
-  plugins: [
-    new CleanWebpackPlugin(),
-    new HTMLWebpackPlugin({
-      template: 'index.html',
-      // Минифицируем HTML код в production версиях
-      minify: {
-        removeComments: isProduction,
-        collapseWhitespace: isProduction,
-      },
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, 'src/favicon.ico'),
-          to: path.resolve(__dirname, 'build'),
-        },
-      ],
-    }),
-    new MiniCssExtractPlugin({
-      filename: filename('css'),
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    })
-  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+  plugins: getPlugins(),
   module: {
     rules: [
       // Пропускаем все scss файлы через loader для
