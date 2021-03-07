@@ -23,7 +23,7 @@ export class Uploader extends StateComponent {
     if (data.length > 0) {
       this.$dispatch(setTrackList(data))
       const {trackList, currentTrackVolume} = this.$getState()
-      this.$dispatch(setCurrentTrackId(0))
+      this.$dispatch(setCurrentTrackId(trackList[0].hash))
       this.audio.init(trackList[0].url, {volume: currentTrackVolume})
     }
     this.$dispatch(setIsFetching(false))
