@@ -24,8 +24,10 @@ export class Player extends StateComponent {
 
   $audioHasChanged({isEnded, currentTime}) {
     const {isRewinding} = this.$getState()
+    const $slider = $(document.querySelector('[data-type="track-slider"]'))
+    const maxSliderLength = $slider.coords().width
     if (!isRewinding && this.audio.getState.trackDuration) {
-      const trackTime = transformRange(currentTime, {min: 0, max: this.audio.trackDuration}, {min: 0, max: 478})
+      const trackTime = transformRange(currentTime, {min: 0, max: this.audio.trackDuration}, {min: 0, max: maxSliderLength})
       this.$dispatch(updateCurrentTracktime(trackTime))
     }
     if (isEnded) {
