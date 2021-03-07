@@ -28,10 +28,9 @@ export class TrackList extends StateComponent {
 
   onClick(event) {
     const $target = $(event.target)
-    const $button = $target.closest('[data-type="button"]')
     const $trackItem = $target.closest('[data-type="track-item"]')
-    if ($button.currentElement) {
-      if ($button.attr('data-action') === 'play') {
+    if ($trackItem.currentElement) {
+      if ($trackItem.attr('data-action') === 'play') {
         const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
         const id = $trackItem.attr('data-id')
         if (!(currentTrackId === id)) {
@@ -44,7 +43,7 @@ export class TrackList extends StateComponent {
           this.audio.play()
           this.$dispatch(togglePlay(true))
         }
-      } else if ($button.attr('data-action') === 'pause') {
+      } else if ($trackItem.attr('data-action') === 'pause') {
         this.audio.pause()
         this.$dispatch(togglePlay(false))
       }
