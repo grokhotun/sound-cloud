@@ -68,20 +68,6 @@
     }
   }
 }
-.button {
-  cursor: pointer;
-  &--repeat {
-    &.active {
-      color: $mainColor;
-    }
-  }
-  &--random {
-    &.active {
-      color: $mainColor;
-    }
-  }
-}
-
 @media (max-width:450px) {
   .player {
     flex-direction: column;

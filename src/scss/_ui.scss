@@ -5,3 +5,19 @@ button {
   padding: 5px;
   font-size: 14px;
 }
+.button {
+  cursor: pointer;
+  @media (max-width: 450px){
+    font-size: 15px;
+  }
+  &--repeat {
+    &.active {
+      color: $mainColor;
+    }
+  }
+  &--random {
+    &.active {
+      color: $mainColor;
+    }
+  }
+}
