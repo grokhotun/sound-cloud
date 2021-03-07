@@ -10,7 +10,7 @@ export class Player extends StateComponent {
   constructor($root, options) {
     super($root, {
       name: 'Player',
-      listeners: ['mousedown', 'click'],
+      listeners: ['mousedown', 'click', 'touchstart'],
       watch: ['play', 'mute', 'shuffle', 'repeat', 'currentTracktime', 'currentTime', 'isEnded'],
       ...options
     })
@@ -44,6 +44,9 @@ export class Player extends StateComponent {
   }
 
   onClick(event) {
+    if (this.$getState().isFetching) {
+      return
+    }
     const $target = $(event.target)
     const $button = $target.closest('[data-type="button"]')
     if ($button.currentElement) {
@@ -83,6 +86,23 @@ export class Player extends StateComponent {
   }
 
   async onMousedown(event) {
+    if (getHandleType(event) === 'track') {
+      this.$dispatch(setIsRewinding(true))
+      const rewindingTime = await dragHandler(event, 'track-slider')
+      const trackTime = transformRange(rewindingTime, {min: 0, max: 478}, {min: 0, max: this.audio.trackDuration || 300})
+      this.audio.rewind(trackTime)
+      this.$dispatch(setIsRewinding(false))
+    } else if (getHandleType(event) === 'volume') {
+      this.$dispatch(setIsRewinding(true))
+      const volumeValue = await dragHandler(event, 'volume-slider')
+      const newVolumeValue = transformRange(volumeValue, {min: 0, max: 70}, {min: 0, max: 1}, false)
+      this.audio.volume(newVolumeValue)
+      this.$dispatch(updateCurrenttrackVolume(newVolumeValue))
+      this.$dispatch(setIsRewinding(false))
+    }
+  }
+
+  async onTouchstart(event) {
     if (getHandleType(event) === 'track') {
       this.$dispatch(setIsRewinding(true))
       const rewindingTime = await dragHandler(event, 'track-slider')
