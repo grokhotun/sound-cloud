@@ -87,9 +87,10 @@ export class Player extends StateComponent {
 
   async onMousedown(event) {
     if (getHandleType(event) === 'track') {
+      const $slider = $(document.querySelector('[data-type="track-slider"]'))
       this.$dispatch(setIsRewinding(true))
       const rewindingTime = await dragHandler(event, 'track-slider')
-      const trackTime = transformRange(rewindingTime, {min: 0, max: 478}, {min: 0, max: this.audio.trackDuration || 300})
+      const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.trackDuration || 300})
       this.audio.rewind(trackTime)
       this.$dispatch(setIsRewinding(false))
     } else if (getHandleType(event) === 'volume') {
@@ -104,9 +105,10 @@ export class Player extends StateComponent {
 
   async onTouchstart(event) {
     if (getHandleType(event) === 'track') {
+      const $slider = $(document.querySelector('[data-type="track-slider"]'))
       this.$dispatch(setIsRewinding(true))
       const rewindingTime = await dragHandler(event, 'track-slider')
-      const trackTime = transformRange(rewindingTime, {min: 0, max: 478}, {min: 0, max: this.audio.trackDuration || 300})
+      const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.trackDuration || 300})
       this.audio.rewind(trackTime)
       this.$dispatch(setIsRewinding(false))
     } else if (getHandleType(event) === 'volume') {
