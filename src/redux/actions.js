@@ -96,3 +96,10 @@ export function setCurrentAudioHandlePosition(payload) {
     payload
   }
 }
+
+export function setShuffledTrackList(payload) {
+  return {
+    type: 'SET_SHUFFLED_TRACK_LIST',
+    payload
+  }
+}

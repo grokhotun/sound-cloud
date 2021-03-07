@@ -9,6 +9,7 @@
   &__item {
     cursor: pointer;
     display: flex;
+    align-items: center;
     border-bottom: 1px solid $backgroundColor;
     padding: 20px 10px;
     & > * {

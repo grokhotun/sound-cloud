@@ -2,7 +2,7 @@ import {getTracklist} from '@/components/TrackList/tracklist.template'
 import {$} from '@/core/Dom'
 import {StateComponent} from '@/core/StateComponent'
 import {getTrackIdByHash} from '@/core/utils'
-import {setCurrentTrackId, togglePlay} from '@/redux/actions'
+import {setCurrentTrackId, togglePlay, setCurrentAudioHandlePosition} from '@/redux/actions'
 
 export class TrackList extends StateComponent {
   static className = 'track-list'
@@ -11,7 +11,7 @@ export class TrackList extends StateComponent {
     super($root, {
       name: 'Player',
       listeners: ['click'],
-      watch: ['trackList', 'isFetching', 'play', 'currentTrackId'],
+      watch: ['shuffledTrackList', 'isFetching', 'play', 'currentTrackId'],
       ...options
     })
   }
@@ -32,11 +32,17 @@ export class TrackList extends StateComponent {
     const $trackItem = $target.closest('[data-type="track-item"]')
     if ($trackItem.currentElement) {
       if ($trackItem.attr('data-action') === 'play') {
-        const {trackList, currentTrackId, currentTrackVolume} = this.$getState()
+        this.$dispatch(setCurrentAudioHandlePosition(0))
+        const {trackList, currentTrackId, currentTrackVolume, mute, repeat} = this.$getState()
+        const options = {
+          volume: currentTrackVolume,
+          muted: mute,
+          loop: repeat
+        }
         const id = $trackItem.attr('data-id')
         if (!(currentTrackId === id)) {
           const nextTrackId = getTrackIdByHash(trackList, id)
-          this.audio.init(trackList[nextTrackId].url, {volume: currentTrackVolume})
+          this.audio.init(trackList[nextTrackId].url, options)
           this.$dispatch(setCurrentTrackId(id))
           this.$dispatch(togglePlay(true))
           this.audio.play()

@@ -2,12 +2,12 @@ import {getLoader} from '@/components/Loader/Loader'
 import {getButton} from '@/components/Player/player.template'
 
 export function getTracklist(state) {
-  const {trackList, isFetching, currentTrackId, play} = state
+  const {shuffledTrackList, isFetching, currentTrackId, play} = state
   if (isFetching) {
     return getLoader()
   }
-  if (trackList.length) {
-    const template = trackList.map((track, idx) => getTrack(track, idx, currentTrackId, play)).join('')
+  if (shuffledTrackList.length) {
+    const template = shuffledTrackList.map((track, idx) => getTrack(track, idx, currentTrackId, play)).join('')
     return template
   }
   return 'Треков не найдено :('

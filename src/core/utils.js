@@ -37,3 +37,18 @@ export function formatBytes(bytes, decimals = 2) {
 export function getTrackIdByHash(trackList, trackHash) {
   return trackList.map(track => track.hash).indexOf(trackHash)
 }
+
+export function shuffler(array) {
+  const newArray = [...array]
+  let currentIndex = newArray.length
+  let temporaryValue
+  let randomIndex
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex -= 1
+    temporaryValue = newArray[currentIndex]
+    newArray[currentIndex] = newArray[randomIndex]
+    newArray[randomIndex] = temporaryValue
+  }
+  return newArray
+}

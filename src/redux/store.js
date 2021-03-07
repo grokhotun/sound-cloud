@@ -1,11 +1,12 @@
 export const defaultState = {
   trackList: [],
+  shuffledTrackList: [],
   play: false,
   mute: false,
   shuffle: false,
   repeat: false,
   currentTrackVolume: 1,
-  currentTrackId: 0,
+  currentTrackId: null,
   isRewinding: false,
   tracksForUpload: [],
   isFetching: true,
@@ -19,7 +20,8 @@ const normalizeState = state => ({
   isFetching: true,
   isRewinding: false,
   tracksForUpload: [],
-  trackList: []
+  trackList: [],
+  shuffledTrackList: []
 })
 
 export function normalizeInitialState(state) {

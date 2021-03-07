@@ -84,6 +84,12 @@ export function rootReducer(state, action) {
         currentAudioHandlePosition: action.payload
       }
 
+    case 'SET_SHUFFLED_TRACK_LIST':
+      return {
+        ...state,
+        shuffledTrackList: action.payload
+      }
+
     default:
       return state
   }
