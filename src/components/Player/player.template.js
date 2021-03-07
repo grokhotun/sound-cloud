@@ -21,7 +21,8 @@ export function getPlayer(state) {
   const currentTrackVolume = `${volume}px`
   const currentTracktime = `${state.currentTracktime}px`
   return `
-    <div class="player__buttons">
+    <div class="player__col player__col--first">
+      <div class="player__buttons">
       ${getButton('backward', '', 'prev')}
       ${playPauseButton}
       ${getButton('forward', '', 'next')}
@@ -30,7 +31,9 @@ export function getPlayer(state) {
       <div data-type="track-slider" class="track-slider"></div>
       <div style="left: ${currentTracktime}" data-handle="track" class="track-handler"></div>
     </div>
-    <div class="player__buttons">
+    </div>
+    <div class="player__col player__col--second">
+      <div class="player__buttons">
       ${muteUnmuteButton}
       <div class="player__volume-slider">
         <div data-type="volume-slider" class="volume-slider"></div>
@@ -40,6 +43,7 @@ export function getPlayer(state) {
     <div class="player__buttons">
       ${randomButton}
       ${repeatButton}
+    </div>
     </div>
   `
 }

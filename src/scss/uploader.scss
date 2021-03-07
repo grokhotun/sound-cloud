@@ -12,6 +12,7 @@
   &__files-list {
     .list-item {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       @include clear-list;
       padding: 10px 5px;

@@ -4,6 +4,15 @@
   margin-bottom: 15px;
   display: flex;
   align-items: center;
+  &__col {
+    display: flex;
+    align-items: center;
+    &--first{
+      flex: 1 1 auto;
+    }
+    &--second{
+    }
+  }
   &__buttons {
     display: flex;
     align-items: center;
@@ -20,8 +29,9 @@
     flex: 1 1 auto;
     position: relative;
     height: 1px;
-    width: 200px;
+    min-width: 100px;
     background-color: $mainColor;
+    margin: 0 5px;
     .track-slider {
     }
     .track-handler {
@@ -68,6 +78,20 @@
   &--random {
     &.active {
       color: $mainColor;
+    }
+  }
+}
+
+@media (max-width:450px) {
+  .player {
+    flex-direction: column;
+    &__col {
+      width: 100%;
+      &--first{
+        margin-bottom: 20px;
+      }
+      &--second{
+      }
     }
   }
 }
