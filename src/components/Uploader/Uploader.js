@@ -19,7 +19,7 @@ export class Uploader extends StateComponent {
 
   async fetchData() {
     this.$dispatch(setIsFetching(true))
-    const data = await this.api.fetchData()
+    const data = await this.api.getMusicList()
     if (data.length > 0) {
       this.$dispatch(setTrackList(data))
       const {trackList, currentTrackVolume, currentTrackId, currentAudioTimePosition, mute, play, repeat, shuffle} = this.$getState()
@@ -36,7 +36,7 @@ export class Uploader extends StateComponent {
         play: play
       }
       const $currentTrackId = getTrackIdByHash(trackList, currentTrackId)
-      if ($currentTrackId > 0) {
+      if ($currentTrackId !== -1) {
         this.$dispatch(setCurrentTrackId(currentTrackId))
         this.audio.init(trackList[$currentTrackId].url, options)
       } else {
@@ -80,7 +80,7 @@ export class Uploader extends StateComponent {
     })
   }
 
-  onClick(event) {
+  async onClick(event) {
     const $target = $(event.target)
     const $parent = $target.closest('.uploader')
     if ($target.attr('data-action') === 'open') {
@@ -96,6 +96,12 @@ export class Uploader extends StateComponent {
           console.log(`Some ${error} has occured`)
         },
         async () => {
+          const {name, size, md5Hash} = await task.snapshot.ref.getMetadata()
+          const url = await task.snapshot.ref.getDownloadURL()
+          const trackFinded = await this.api.findTrackByHashId(md5Hash)
+          if (!trackFinded) {
+            this.api.createCollectionRecord(md5Hash, name, url, size)
+          }
           this.fetchData()
         })
       })

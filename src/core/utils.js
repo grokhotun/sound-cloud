@@ -35,7 +35,7 @@ export function formatBytes(bytes, decimals = 2) {
 }
 
 export function getTrackIdByHash(trackList, trackHash) {
-  return trackList.map(track => track.hash).indexOf(trackHash)
+  return trackList.map(track => track.hashId).indexOf(trackHash)
 }
 
 export function shuffler(array) {
