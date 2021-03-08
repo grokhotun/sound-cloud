@@ -32,7 +32,6 @@ export class TrackList extends StateComponent {
     const $trackItem = $target.closest('[data-type="track-item"]')
     if ($trackItem.currentElement) {
       if ($trackItem.attr('data-action') === 'play') {
-        this.$dispatch(setCurrentAudioHandlePosition(0))
         const {trackList, currentTrackId, currentTrackVolume, mute, repeat} = this.$getState()
         const options = {
           volume: currentTrackVolume,
@@ -41,6 +40,7 @@ export class TrackList extends StateComponent {
         }
         const id = $trackItem.attr('data-id')
         if (!(currentTrackId === id)) {
+          this.$dispatch(setCurrentAudioHandlePosition(0))
           const nextTrackId = getTrackIdByHash(trackList, id)
           this.audio.init(trackList[nextTrackId].url, options)
           this.$dispatch(setCurrentTrackId(id))
@@ -51,7 +51,7 @@ export class TrackList extends StateComponent {
           this.$dispatch(togglePlay(true))
         }
       } else if ($trackItem.attr('data-action') === 'pause') {
-        this.audio.pause()
+        this.audio.play()
         this.$dispatch(togglePlay(false))
       }
     }
