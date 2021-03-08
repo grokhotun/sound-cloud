@@ -40,7 +40,7 @@ export class Uploader extends StateComponent {
         this.$dispatch(setCurrentTrackId(currentTrackId))
         this.audio.init(trackList[$currentTrackId].url, options)
       } else {
-        const $currentTrackHash = trackList[0].hash
+        const $currentTrackHash = trackList[0].hashId
         this.$dispatch(setCurrentTrackId($currentTrackHash))
         this.audio.init(trackList[0].url, options)
       }

@@ -28,7 +28,7 @@ export class Player extends StateComponent {
     const $slider = $(document.querySelector('[data-type="track-slider"]'))
     const maxSliderLength = $slider.coords().width
     if (!isRewinding && this.audio.getState.trackDuration) {
-      const trackTime = transformRange(currentTime, {min: 0, max: this.audio.trackDuration}, {min: 0, max: maxSliderLength})
+      const trackTime = transformRange(currentTime, {min: 0, max: this.audio.getState.trackDuration}, {min: 0, max: maxSliderLength})
       this.$dispatch(setCurrentAudioHandlePosition(trackTime))
       this.$dispatch(setCurrentAudioTimePosition(currentTime))
     }
@@ -97,7 +97,7 @@ export class Player extends StateComponent {
       this.$dispatch(setIsRewinding(true))
       const $slider = $(document.querySelector('[data-type="track-slider"]'))
       const rewindingTime = await dragHandler(event, 'track-slider')
-      const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.trackDuration || 300})
+      const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.getState.trackDuration || 300})
       this.audio.rewind(trackTime)
       this.$dispatch(setIsRewinding(false))
     } else if (getHandleType(event) === 'volume') {
@@ -115,7 +115,7 @@ export class Player extends StateComponent {
       this.$dispatch(setIsRewinding(true))
       const $slider = $(document.querySelector('[data-type="track-slider"]'))
       const rewindingTime = await dragHandler(event, 'track-slider')
-      const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.trackDuration || 300})
+      const trackTime = transformRange(rewindingTime, {min: 0, max: $slider.coords().width}, {min: 0, max: this.audio.getState.trackDuration || 300})
       this.audio.rewind(trackTime)
       this.$dispatch(setIsRewinding(false))
     } else if (getHandleType(event) === 'volume') {
@@ -143,7 +143,7 @@ export class Player extends StateComponent {
     if (direction === 'next') {
       if ($currentTrackId + 1 < shuffledTrackList.length) {
         newTrackId = $currentTrackId + 1
-        trackHash = shuffledTrackList[newTrackId].hash
+        trackHash = shuffledTrackList[newTrackId].hashId
         this.$dispatch(setCurrentTrackId(trackHash))
         this.audio.init(shuffledTrackList[newTrackId].url, options)
         this.audio.play()
@@ -154,7 +154,7 @@ export class Player extends StateComponent {
     } else if (direction === 'prev') {
       if ($currentTrackId - 1 >= 0) {
         newTrackId = $currentTrackId - 1
-        trackHash = shuffledTrackList[newTrackId].hash
+        trackHash = shuffledTrackList[newTrackId].hashId
         this.$dispatch(setCurrentTrackId(trackHash))
         this.audio.init(shuffledTrackList[newTrackId].url, options)
         this.audio.play()
