@@ -11,6 +11,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "dev": "cross-env NODE_ENV=development webpack serve --mode development --open",
+    "dev-build": "cross-env NODE_ENV=development webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "deploy": "yarn build && gh-pages -d build",
     "precommit": "yarn eslint ./src"
