@@ -90,6 +90,12 @@ export function rootReducer(state, action) {
         shuffledTrackList: action.payload
       }
 
+    case 'SET_SEARCH_QUERY':
+      return {
+        ...state,
+        searchQuery: action.payload
+      }
+
     default:
       return state
   }

@@ -63,6 +63,10 @@ class DOM {
     })
     return this
   }
+
+  value() {
+    return this.$currentElement.value
+  }
 }
 
 export function $(selector) {

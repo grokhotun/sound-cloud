@@ -11,7 +11,8 @@ export const defaultState = {
   tracksForUpload: [],
   isFetching: true,
   currentAudioTimePosition: 0,
-  currentAudioHandlePosition: 0
+  currentAudioHandlePosition: 0,
+  searchQuery: ''
 }
 
 const normalizeState = state => ({
@@ -21,7 +22,8 @@ const normalizeState = state => ({
   isRewinding: false,
   tracksForUpload: [],
   trackList: [],
-  shuffledTrackList: []
+  shuffledTrackList: [],
+  searchQuery: ''
 })
 
 export function normalizeInitialState(state) {

@@ -10,6 +10,7 @@ import {FirebaseAPI} from '@/api/Firebase';
 import {AudioAPI} from '@/core/AudioAPI';
 import {normalizeInitialState} from '@/redux/store';
 import {firebaseConfig} from '@/firebase.config';
+import {Searchbar} from '@/components/Searchbar/Searchbar';
 import '@/scss/index.scss'
 
 
@@ -21,7 +22,7 @@ store.subscribe(state => storage('sound-cloud', state))
 
 
 const soundCloud = new SoundCloud('#root', {
-  components: [Header, Player, Uploader, TrackList],
+  components: [Header, Player, Uploader, Searchbar, TrackList],
   store,
   audio,
   firebase

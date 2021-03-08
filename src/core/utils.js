@@ -52,3 +52,7 @@ export function shuffler(array) {
   }
   return newArray
 }
+
+export function querySearch(items, query) {
+  return query.length === 0 ? items : items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1)
+}

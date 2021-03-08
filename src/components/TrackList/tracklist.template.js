@@ -1,13 +1,14 @@
 import {getLoader} from '@/components/Loader/Loader'
 import {getButton} from '@/components/Player/player.template'
+import {querySearch} from '@/core/utils'
 
 export function getTracklist(state) {
-  const {shuffledTrackList, isFetching, currentTrackId, play} = state
+  const {shuffledTrackList, isFetching, currentTrackId, play, searchQuery} = state
   if (isFetching) {
     return getLoader()
   }
   if (shuffledTrackList.length) {
-    const template = shuffledTrackList.map((track, idx) => getTrack(track, idx, currentTrackId, play)).join('')
+    const template = querySearch(shuffledTrackList, searchQuery).map((track, idx) => getTrack(track, idx, currentTrackId, play)).join('')
     return template
   }
   return 'Треков не найдено :('

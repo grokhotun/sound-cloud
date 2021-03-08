@@ -1,0 +1,13 @@
+.searchbar {
+  margin-bottom: 15px;
+  &__input {
+    display: flex;
+    input {
+      padding: 0 16px;
+      border: 0;
+      color: #666;
+    }
+  }
+  &__btn {
+  }
+}

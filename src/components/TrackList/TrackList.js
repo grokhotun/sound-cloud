@@ -11,7 +11,7 @@ export class TrackList extends StateComponent {
     super($root, {
       name: 'Player',
       listeners: ['click'],
-      watch: ['shuffledTrackList', 'isFetching', 'play', 'currentTrackId'],
+      watch: ['shuffledTrackList', 'isFetching', 'play', 'currentTrackId', 'searchQuery'],
       ...options
     })
   }
