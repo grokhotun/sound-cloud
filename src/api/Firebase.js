@@ -4,47 +4,25 @@ import 'firebase/auth'
 import 'firebase/firestore'
 
 import {formatBytes} from '@/core/utils'
+
+/**
+ * Класс для работы с Firebase API
+ */
 export class FirebaseAPI {
   constructor(config = {}) {
     firebase.initializeApp(config)
     this.storage = firebase.storage()
   }
 
-  async fetchData() {
-    const result = []
-    const folder = this.storage.ref().child('music')
-    const {items} = await folder.listAll()
-    for (const itemRef of items) {
-      const url = await itemRef.getDownloadURL()
-      const meta = await itemRef.getMetadata()
-      result.push({
-        name: itemRef.name.replace('.mp3', ''),
-        size: formatBytes(meta.size),
-        hash: meta.md5Hash,
-        url
-      })
-    }
-    return result
-  }
-
+  /**
+   * Метод для загрузки файла на сервер firebase
+   * @param {*} file Принимает объект файла
+   * @return {task} Возвращает объект firebase task
+   */
   put(file) {
     const ref = this.storage.ref(`music/${file.name}`)
     const task = ref.put(file)
     return task
-  }
-
-  auth(email, password) {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Signed in
-          // const user = userCredential.user
-          const user = userCredential.user
-          console.log(user)
-          // ...
-        })
-        .catch((error) => {
-          console.log(error)
-        })
   }
 
   /**
