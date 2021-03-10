@@ -8,10 +8,15 @@ export function getTracklist(state) {
     return getLoader()
   }
   if (shuffledTrackList.length) {
-    const template = querySearch(shuffledTrackList, searchQuery).map((track, idx) => getTrack(track, idx, currentTrackId, play)).join('')
-    return template
+    const template = querySearch(shuffledTrackList, searchQuery).map((track, idx) => getTrack(track, idx, currentTrackId, play))
+    if (template.length) {
+      return template.join('')
+    } else {
+      return 'По вашему запросу ничего не найдено :('
+    }
+  } else {
+    return 'Треков не найдено :('
   }
-  return 'Треков не найдено :('
 }
 
 function getTrack(track, idx, currentTrackId, isPlaying) {
