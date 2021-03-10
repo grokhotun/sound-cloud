@@ -11,7 +11,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
 
 
-const filename = (ext) => isDevelopment ? `[name].${ext}` : `[name].[hash].${ext}`
+const filename = (ext) => isDevelopment ? `[name].${ext}` : `[name].[fullhash].${ext}`
 
 const getJsLoaders = () => {
   const loaders = ['babel-loader']
