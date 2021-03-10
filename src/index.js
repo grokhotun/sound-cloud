@@ -1,4 +1,5 @@
 import {Header} from '@/components/Header/Header'
+import {Footer} from '@/components/Footer/Footer'
 import {Player} from '@/components/Player/Player'
 import {SoundCloud} from '@/components/SoundCloud/SoundCloud'
 import {TrackList} from '@/components/TrackList/TrackList';
@@ -22,7 +23,7 @@ store.subscribe(state => storage('sound-cloud', state))
 
 
 const soundCloud = new SoundCloud('#root', {
-  components: [Header, Player, Uploader, Searchbar, TrackList],
+  components: [Header, Player, Uploader, Searchbar, TrackList, Footer],
   store,
   audio,
   firebase

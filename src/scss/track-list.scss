@@ -1,11 +1,7 @@
-.soundcloud {
-}
-.header {
-  text-align: center;
-}
 .track-list {
   padding: 20px;
   background-color: $white;
+  margin-bottom: 15px;
   &__item {
     cursor: pointer;
     display: flex;

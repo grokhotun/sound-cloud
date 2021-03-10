@@ -26,7 +26,7 @@ export class SoundCloud {
       api: this.api
     }
     this.components = this.components.map(Component => {
-      const $componentNode = $.create('div', Component.className)
+      const $componentNode = $.create(Component.rootElementType, Component.className)
       const component = new Component($componentNode, componentOptions)
       $componentNode.html(component.renderComponent())
       $rootNode.append($componentNode)
