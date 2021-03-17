@@ -39,9 +39,14 @@ button {
     padding: 7px 8px;
     box-shadow: none;
   }
-  .error-message {
-    padding: 5px 0;
-    font-size: 14px;
-    color: $danger;
+}
+.error-message {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  font-size: 14px;
+  color: $danger;
+  i {
+    margin-right: 10px;
   }
 }

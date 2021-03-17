@@ -1,9 +1,9 @@
-import {$} from '@/core/Dom';
-import {getUploader} from '@/components/Uploader/uploader.template';
+import {$} from '@/core/Dom'
+import {getUploader} from '@/components/Uploader/uploader.template'
 import {setCurrentTrackId, setIsFetching, setTrackList, updateTracksForUpload, setShuffledTrackList} from '@/redux/actions'
-import {StateComponent} from '@/core/StateComponent';
+import {StateComponent} from '@/core/StateComponent'
 import {setUploadProgress} from '@/redux/actions'
-import {getTrackIdByHash, shuffler} from '@/core/utils';
+import {getTrackIdByHash, shuffler} from '@/core/utils'
 
 export class Uploader extends StateComponent {
   static className = 'uploader'
@@ -14,6 +14,14 @@ export class Uploader extends StateComponent {
       listeners: ['change', 'click'],
       watch: ['tracksForUpload'],
       ...options
+    })
+  }
+
+  beforeInit() {
+    this.useState({
+      isError: false,
+      typeError: false,
+      message: ''
     })
   }
 
@@ -53,7 +61,7 @@ export class Uploader extends StateComponent {
   }
 
   get template() {
-    return getUploader(this.$getState())
+    return getUploader(this.$getState(), this.state)
   }
 
   renderComponent() {
@@ -61,23 +69,21 @@ export class Uploader extends StateComponent {
   }
 
   onChange(e) {
-    if (!e.target.files.length) {
-      return
-    }
-
-    const files = Array.from(e.target.files)
+    let files = Array.from(e.target.files)
     const newFiles = files.map(file => ({
       file,
       uploadProgress: 0
     }))
-    files.forEach(file => {
-      if (!file.type.match('audio')) {
-        alert('Не музыка')
-        return
-      } else {
-        this.$dispatch(updateTracksForUpload(newFiles))
-      }
-    })
+    const isValid = files.filter(file => !file.type.match('audio'))
+    if (!isValid.length) {
+      this.$dispatch(updateTracksForUpload(newFiles))
+    } else {
+      files = []
+      this.setState({
+        isError: true,
+        message: 'Загружаемые файлы должны быть аудио файлы!'
+      })
+    }
   }
 
   async onClick(event) {
@@ -87,6 +93,13 @@ export class Uploader extends StateComponent {
       $parent.find('input').click()
     } else if ($target.attr('data-action') === 'upload') {
       const {tracksForUpload} = this.$getState()
+      if (!tracksForUpload.length) {
+        this.setState({
+          isError: true,
+          message: 'Вы не выбрали ни одного трека для загрузки :('
+        })
+        return false
+      }
       tracksForUpload.forEach((track, idx) => {
         const task = this.api.put(track.file)
         task.on('state-change', snapshot => {
