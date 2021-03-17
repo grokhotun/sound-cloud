@@ -1,2 +1,0 @@
-export const TRACK_URL = 'https://firebasestorage.googleapis.com/v0/b/sound-cloud-408fc.appspot.com/o/music%2FDie%20Bots%20-%20Was%20wollen%20wir%20trinken.mp3?alt=media&token=3d8b2181-ac7a-4e26-82e7-082953c17a33'
-export const MAX_KORZH = 'https://firebasestorage.googleapis.com/v0/b/sound-cloud-408fc.appspot.com/o/music%2F%D0%9C%D0%B0%D0%BA%D1%81%20%D0%9A%D0%BE%D1%80%D0%B6%20-%20%D0%93%D0%BE%D1%80%D1%8B%20%D0%9F%D0%BE%20%D0%9A%D0%BE%D0%BB%D0%B5%D0%BD%D0%BE.mp3?alt=media&token=1a28c3de-629f-4f91-87c9-4a3d594dd59e'
