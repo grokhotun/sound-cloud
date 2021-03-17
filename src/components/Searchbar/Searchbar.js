@@ -1,7 +1,7 @@
-import {getSearchbar} from '@/components/Searchbar/searchbar.template';
-import {setSearchQuery} from '@/redux/actions';
-import {$} from '@/core/Dom';
-import {StateComponent} from '@/core/StateComponent';
+import {getSearchbar} from '@/components/Searchbar/searchbar.template'
+import {setSearchQuery} from '@/redux/actions'
+import {$} from '@/core/Dom'
+import {StateComponent} from '@/core/StateComponent'
 
 export class Searchbar extends StateComponent {
   static className = 'searchbar'

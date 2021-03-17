@@ -7,7 +7,6 @@ export class BaseComponent extends DomListener {
     this.audio = options.audio
     this.api = options.api
     this.watch = options.watch || []
-    // this.storeSub = null
     this.beforeInit()
   }
 
@@ -18,9 +17,14 @@ export class BaseComponent extends DomListener {
     throw new Error('Метод renderComponent() должен быть определен')
   }
 
-  beforeInit() {
-  }
+  /**
+   * Метод жизненного цикла
+   */
+  beforeInit() {}
 
+  /**
+   * Метод жизненного цикла
+   */
   componentDidMount() {}
 
   init() {
@@ -29,7 +33,6 @@ export class BaseComponent extends DomListener {
 
   destroy() {
     this.removeListeners()
-    // this.storeSub.unsubscribe()
   }
 
   $storeHasChanged() {}
@@ -43,10 +46,6 @@ export class BaseComponent extends DomListener {
   $dispatch(action) {
     this.store.dispatch(action)
   }
-
-  // $subscribe(func) {
-  //   this.storeSub = this.store.subscribe(func)
-  // }
 
   $getState() {
     return this.store.getState()

@@ -1,4 +1,4 @@
-import {BaseComponent} from '@/core/BaseComponent';
+import {BaseComponent} from '@/core/BaseComponent'
 
 export class StateComponent extends BaseComponent {
   constructor(...args) {

@@ -1,4 +1,4 @@
-import {isSame} from '@/core/utils';
+import {isSame} from '@/core/utils'
 export class AudioObserver {
   constructor(audio) {
     this.audio = audio

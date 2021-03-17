@@ -1,7 +1,7 @@
-import {getTracklist} from '@/components/TrackList/tracklist.template'
 import {$} from '@/core/Dom'
 import {StateComponent} from '@/core/StateComponent'
 import {getTrackIdByHash} from '@/core/utils'
+import {getTracklist} from '@/components/TrackList/tracklist.template'
 import {setCurrentTrackId, togglePlay, setCurrentAudioHandlePosition} from '@/redux/actions'
 
 export class TrackList extends StateComponent {

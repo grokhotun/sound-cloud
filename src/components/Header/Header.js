@@ -1,4 +1,4 @@
-import {BaseComponent} from '@/core/BaseComponent';
+import {BaseComponent} from '@/core/BaseComponent'
 
 export class Header extends BaseComponent {
   static className = 'header'

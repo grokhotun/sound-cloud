@@ -4,7 +4,7 @@ import {getPlayer} from '@/components/Player/player.template'
 import {StateComponent} from '@/core/StateComponent'
 import {getTrackIdByHash, transformRange, shuffler} from '@/core/utils'
 import {togglePlay, toggleShuffle, toggleRepeat, toggleMute, setIsRewinding, updateCurrenttrackVolume, setCurrentTrackId, setCurrentAudioHandlePosition} from '@/redux/actions'
-import {setCurrentAudioTimePosition, setShuffledTrackList} from '@/redux/actions';
+import {setCurrentAudioTimePosition, setShuffledTrackList} from '@/redux/actions'
 export class Player extends StateComponent {
   static className = 'player'
 
