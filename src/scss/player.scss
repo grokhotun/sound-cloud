@@ -29,7 +29,7 @@
       }
     }
     @media (max-width: 445px){
-      margin: 0 15px 15px 15px;
+      margin: 0 15px 20px 15px;
     }
   }
   &__name {
@@ -53,6 +53,13 @@
       background-color: $mainColor;
       border-radius: 50%;
       transform: translateY(-50%);
+      @media (max-width: 445px){
+        width: 15px;
+        height: 15px;
+      }
+    }
+    @media (max-width: 445px){
+      margin: 10px 5px;
     }
   }
   &__volume-slider {
