@@ -20,7 +20,7 @@ export class Uploader extends StateComponent {
   beforeInit() {
     this.useState({
       isError: false,
-      typeError: false,
+      isLoading: false,
       message: ''
     })
   }
@@ -69,16 +69,22 @@ export class Uploader extends StateComponent {
   }
 
   onChange(e) {
-    let files = Array.from(e.target.files)
-    const newFiles = files.map(file => ({
-      file,
-      uploadProgress: 0
-    }))
-    const isValid = files.filter(file => !file.type.match('audio'))
-    if (!isValid.length) {
+    let files = []
+    this.setState({
+      isError: false,
+      isLoading: false,
+      message: ''
+    })
+
+    files = Array.from(e.target.files)
+    const isValid = files.filter(file => !file.type.match('audio')).length
+    if (!isValid) {
+      const newFiles = files.map(file => ({
+        file,
+        uploadProgress: 0
+      }))
       this.$dispatch(updateTracksForUpload(newFiles))
     } else {
-      files = []
       this.setState({
         isError: true,
         message: 'Загружаемые файлы должны быть аудио файлы!'
@@ -102,21 +108,35 @@ export class Uploader extends StateComponent {
       }
       tracksForUpload.forEach((track, idx) => {
         const task = this.api.put(track.file)
-        task.on('state-change', snapshot => {
-          const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          this.$dispatch(setUploadProgress({idx, percentage}))
-        }, error => {
-          console.log(`Some ${error} has occured`)
-        },
-        async () => {
-          const {name, size, md5Hash} = await task.snapshot.ref.getMetadata()
-          const url = await task.snapshot.ref.getDownloadURL()
-          const trackFinded = await this.api.findTrackByHashId(md5Hash)
-          if (!trackFinded) {
-            this.api.createCollectionRecord(md5Hash, name, url, size)
-          }
-          this.fetchData()
+        this.setState({
+          isLoading: true
         })
+        task.on('state-change',
+            snapshot => {
+              const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              this.$dispatch(setUploadProgress({idx, percentage}))
+            },
+            error => {
+              console.log(`Some ${error} has occured`)
+            },
+            async () => {
+              const {tracksForUpload} = this.$getState()
+              const {name, size, md5Hash} = await task.snapshot.ref.getMetadata()
+              const url = await task.snapshot.ref.getDownloadURL()
+              const trackFinded = await this.api.findTrackByHashId(md5Hash)
+              if (!trackFinded) {
+                this.api.createCollectionRecord(md5Hash, name, url, size)
+              }
+              const isAllUploaded = tracksForUpload.every(({uploadProgress}) => uploadProgress === 100)
+              if (isAllUploaded) {
+                this.$dispatch(updateTracksForUpload([]))
+                this.fetchData()
+                this.setState({
+                  isLoading: false
+                })
+              }
+            }
+        )
       })
     }
   }

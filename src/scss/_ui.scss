@@ -4,6 +4,11 @@ button {
   border: none;
   padding: 5px;
   font-size: 14px;
+  &:disabled {
+    opacity: 0.7;
+    color: #999999;
+    background-color: $disabled;
+  }
 }
 .button {
   cursor: pointer;
