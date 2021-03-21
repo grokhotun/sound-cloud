@@ -3,7 +3,7 @@ import 'firebase/storage'
 import 'firebase/auth'
 import 'firebase/firestore'
 
-import {formatBytes} from '@/core/utils'
+import {formatBytes, formatTrackName} from '@/core/utils'
 
 /**
  * Класс для работы с Firebase API
@@ -76,7 +76,7 @@ export class FirebaseAPI {
           .firestore()
           .collection('music')
           .add({
-            name,
+            name: formatTrackName(name),
             url,
             size: formatBytes(size),
             hashId

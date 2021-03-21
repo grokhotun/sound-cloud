@@ -34,6 +34,10 @@ export function formatBytes(bytes, decimals = 2) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
+export function formatTrackName(string = '') {
+  return string.replace('.mp3', '').trim()
+}
+
 export function getTrackIdByHash(trackList, trackHash) {
   return trackList.map(track => track.hashId).indexOf(trackHash)
 }
