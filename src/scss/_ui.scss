@@ -45,12 +45,20 @@ button {
     box-shadow: none;
   }
 }
-.error-message {
+.message {
   display: flex;
   align-items: center;
   padding: 5px 0;
   font-size: 14px;
-  color: $danger;
+  &--error {
+    color: $danger;
+  }
+  &--success {
+    color: $success;
+  }
+  &--warning {
+    color: $warning;
+  }
   i {
     margin-right: 10px;
   }

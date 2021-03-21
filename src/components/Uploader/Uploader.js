@@ -20,6 +20,7 @@ export class Uploader extends StateComponent {
   beforeInit() {
     this.useState({
       isError: false,
+      isSuccess: false,
       isLoading: false,
       message: ''
     })
@@ -73,6 +74,7 @@ export class Uploader extends StateComponent {
     this.setState({
       isError: false,
       isLoading: false,
+      isSuccess: false,
       message: ''
     })
 
@@ -107,10 +109,11 @@ export class Uploader extends StateComponent {
         return false
       }
       tracksForUpload.forEach((track, idx) => {
-        const task = this.api.put(track.file)
         this.setState({
-          isLoading: true
+          isLoading: true,
+          message: 'Загружаю треки...'
         })
+        const task = this.api.put(track.file)
         task.on('state-change',
             snapshot => {
               const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
@@ -132,7 +135,9 @@ export class Uploader extends StateComponent {
                 this.$dispatch(updateTracksForUpload([]))
                 this.fetchData()
                 this.setState({
-                  isLoading: false
+                  isLoading: false,
+                  isSuccess: true,
+                  message: 'Все треки успешно загружены :)'
                 })
               }
             }

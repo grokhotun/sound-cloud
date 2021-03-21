@@ -1,4 +1,4 @@
-export function getUploader(state, {isError, message, isLoading}) {
+export function getUploader(state, {isError, isSuccess, message, isLoading}) {
   const template = tracksForUpload(state.tracksForUpload)
   return `
       <div class="uploader__buttons">
@@ -8,7 +8,13 @@ export function getUploader(state, {isError, message, isLoading}) {
       </div>
       <div class="uploader__messages">
         ${isError
-          ? `<div class="error-message"><i class="fas fa-exclamation-circle"></i><p>${message}</p></div>`
+          ? `<div class="message message--error"><i class="fas fa-exclamation-circle"></i><p>${message}</p></div>`
+          : ''}
+        ${isSuccess
+          ? `<div class="message message--success"><i class="fas fa-check-circle"></i><p>${message}</p></div>`
+          : ''}
+        ${isLoading
+          ? `<div class="message message--warning"><i class="fas fa-spinner"></i><p>${message}</p></div>`
           : ''}
       </div>
       ${template}
