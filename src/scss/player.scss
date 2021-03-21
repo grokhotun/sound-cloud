@@ -9,6 +9,12 @@
     align-items: center;
     &--first{
       flex: 1 1 auto;
+      @media (max-width: 445px){
+        flex-direction: column;
+        .button {
+          font-size: 25px;
+        }
+      }
     }
     &--second{
     }
@@ -22,6 +28,9 @@
         margin-right: 15px;
       }
     }
+    @media (max-width: 445px){
+      margin: 0 15px 15px 15px;
+    }
   }
   &__name {
   }
@@ -32,8 +41,7 @@
     min-width: 100px;
     background-color: $mainColor;
     margin: 0 5px;
-    .track-slider {
-    }
+    width: 95%;
     .track-handler {
       cursor: pointer;
       display: block;
