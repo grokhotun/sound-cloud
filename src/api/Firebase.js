@@ -17,12 +17,18 @@ export class FirebaseAPI {
   /**
    * Метод для загрузки файла на сервер firebase
    * @param {*} file Принимает объект файла
-   * @return {task} Возвращает объект firebase task
+   * @param {function} taskProgress Функция колбэк, вызывающаяся при изменении task
+   * @param {function} taskError Функция колбэк, вызывающаяся при возникновении ошибки task
+   * @param {function} taskCompleted Функция колбэк, вызывающаяся при заверщении task
+   * @return {bool} Возвращает true
    */
-  put(file) {
-    const ref = this.storage.ref(`music/${file.name}`)
-    const task = ref.put(file)
-    return task
+  put(file, taskProgress, taskError, taskCompleted) {
+    const task = this.storage
+        .ref(`music/${file.name}`)
+        .put(file)
+
+    task.on('state-change', taskProgress, taskError, taskCompleted.bind(null, task))
+    return true
   }
 
   /**

@@ -94,6 +94,35 @@ export class Uploader extends StateComponent {
     }
   }
 
+  taskProgress(idx, snapshot) {
+    const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    this.$dispatch(setUploadProgress({idx, percentage}))
+  }
+
+  taskError(error) {
+    console.log(`Some ${error} has occured`)
+  }
+
+  async taskCompleted(task) {
+    const {tracksForUpload} = this.$getState()
+    const {name, size, md5Hash} = await task.snapshot.ref.getMetadata()
+    const url = await task.snapshot.ref.getDownloadURL()
+    const trackFinded = await this.api.findTrackByHashId(md5Hash)
+    if (!trackFinded) {
+      this.api.createCollectionRecord(md5Hash, name, url, size)
+    }
+    const isAllUploaded = tracksForUpload.every(({uploadProgress}) => uploadProgress === 100)
+    if (isAllUploaded) {
+      this.$dispatch(updateTracksForUpload([]))
+      this.fetchData()
+      this.setState({
+        isLoading: false,
+        isSuccess: true,
+        message: 'Все треки успешно загружены :)'
+      })
+    }
+  }
+
   async onClick(event) {
     const $target = $(event.target)
     const $parent = $target.closest('.uploader')
@@ -113,35 +142,7 @@ export class Uploader extends StateComponent {
           isLoading: true,
           message: 'Загружаю треки...'
         })
-        const task = this.api.put(track.file)
-        task.on('state-change',
-            snapshot => {
-              const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              this.$dispatch(setUploadProgress({idx, percentage}))
-            },
-            error => {
-              console.log(`Some ${error} has occured`)
-            },
-            async () => {
-              const {tracksForUpload} = this.$getState()
-              const {name, size, md5Hash} = await task.snapshot.ref.getMetadata()
-              const url = await task.snapshot.ref.getDownloadURL()
-              const trackFinded = await this.api.findTrackByHashId(md5Hash)
-              if (!trackFinded) {
-                this.api.createCollectionRecord(md5Hash, name, url, size)
-              }
-              const isAllUploaded = tracksForUpload.every(({uploadProgress}) => uploadProgress === 100)
-              if (isAllUploaded) {
-                this.$dispatch(updateTracksForUpload([]))
-                this.fetchData()
-                this.setState({
-                  isLoading: false,
-                  isSuccess: true,
-                  message: 'Все треки успешно загружены :)'
-                })
-              }
-            }
-        )
+        this.api.put(track.file, this.taskProgress.bind(this, idx), this.taskError.bind(this), this.taskCompleted.bind(this))
       })
     }
   }
